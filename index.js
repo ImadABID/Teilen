@@ -11,8 +11,27 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.set('views', './views');
 app.set('view engine', 'jade');
 
+const session = require('express-session')
+//app.set('trust proxy', 1)
+app.use(session(
+    {
+        secret: 'secret key',
+        resave: true,
+        rolling: true,
+        saveUninitialized: true,
+        cookie: { 
+            maxAge: 1000 * 3600 //ms    
+        },
+        saveUninitialized: true
+    }
+))
+
 app.get('/',(req, res)=>{
-    res.send("Teilen");
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        res.send("Teilen<hr>Welcome " + req.session.pseudo);
+    }
 });
 
 app.get('/inscription', (req, res)=>{
@@ -30,5 +49,47 @@ app.post('/inscription', (req, res)=>{
     `, req.body.pseudo, req.body.email, req.body.password);
     res.redirect('/');
 });
+
+app.get('/authen', (req, res)=>{
+
+    data = {
+        err_msg : ""
+    }
+    res.render('authen', data);
+
+});
+
+app.post('/authen', (req, res)=>{
+    // Checking info & saving data
+    err_msg = "";
+    err = false;
+    db.all(`
+        SELECT * FROM Users WHERE email = ?;
+    `, req.body.email,
+    (err, row)=>{
+        if(row.length == 0){
+            err_msg = "There is no user with this email";
+            err = true;
+        }else if(row[0].password != req.body.password){
+            err_msg = "Wrong password";
+            err = true;
+        }
+
+        if(err){
+            data = {
+                err_msg : err_msg
+            }
+            res.render('authen', data);
+        }else{
+            req.session.pseudo = row[0].pseudo
+            req.session.email = row[0].email
+            res.redirect('/');
+        }
+    });
+});
+
+app.get('/deconnect', (req, res)=>{
+
+})
 
 app.listen(3030);
