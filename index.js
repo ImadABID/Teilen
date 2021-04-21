@@ -21,19 +21,14 @@ app.get('/inscription', (req, res)=>{
 
 });
 
-app.post('/inscription',(req, res)=>{
+app.post('/inscription', (req, res)=>{
     // Checking info & saving data
-    db.serialize(function() {
-
-        db.run(`
-            INSERT INTO Users(pseudo, email, password)
-            VALUES
-                (?, ?, ?);
-        `, req.body.pseudo, req.body.email, req.body.password);
-    
-    });
+    db.run(`
+        INSERT INTO Users(pseudo, email, password)
+        VALUES
+            (?, ?, ?);
+    `, req.body.pseudo, req.body.email, req.body.password);
     res.redirect('/');
 });
 
-db.close();
-app.listen(3000);
+app.listen(3030);

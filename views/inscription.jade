@@ -5,7 +5,7 @@ html
         meta(charset="UTF-8")
         title="Inscription"
     body(style='text-align:center;')
-        form(action="/editing" method="POST")
+        form(action="/inscription" method="POST")
             p 
                 input(type="text" name="pseudo" placeholder="pseudo" ,required)
             p
@@ -13,4 +13,6 @@ html
             p 
                 input(type="password" name="password" placeholder="mot de passe" ,required)             
             p   
-                input(type="password" name="repassword" placeholder="confirmer mot de passe" ,required)            
+                input(type="password" name="repassword" placeholder="confirmer mot de passe" ,required)
+            p
+                input(type="submit" value="Register")
