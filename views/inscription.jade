@@ -1,7 +1,16 @@
 doctype html
-html(lang="en")
+
+html
     head
         meta(charset="UTF-8")
-        title Inscription 
-    body 
-        h2 Teilen 
+        title="Inscription"
+    body(style='text-align:center;')
+        form(action="/editing" method="POST")
+            p 
+                input(type="text" name="pseudo" placeholder="pseudo" ,required)
+            p
+                input(type="textarea" name="email" placeholder="mail" rows="8" cols="45" ,required)
+            p 
+                input(type="password" name="password" placeholder="mot de passe" ,required)             
+            p   
+                input(type="password" name="repassword" placeholder="confirmer mot de passe" ,required)            
