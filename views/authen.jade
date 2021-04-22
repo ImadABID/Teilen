@@ -1,5 +1,4 @@
 doctype html
-doctype html
 html(lang='fr')
   head
     meta(charset='utf-8')
@@ -19,6 +18,9 @@ html(lang='fr')
       background: white;
       border-radius: 30px;
       box-shadow: 12px 12px 22px grey;
+      }
+      a{
+        padding: 10% 0;
       }
       .btn1{
         border: none;
@@ -40,23 +42,28 @@ html(lang='fr')
       .container
         .row.no-gutters
           .col-lg-5
-            p  Teilen
+           img(src='/Desktop/Logo')
           .col-lg-7
-          h2.font-weight-bold.py-3 Authentification 
-            form(action="/authen" method="POST")
+            h1.font-weight-bold.py-3 Authentification 
+            form(action="/Authen" method="POST")
+              
               .form-row
-                  .col-lg-7
+                .col-lg-7
                     p(style="color : red")=err_msg
               .form-row
                 .col-lg-7
                     input(type="email" name="email" placeholder="mail" rows="8" cols="45" minlength="6" class="form-control my-3",required)
               .form-row
                 .col-lg-7
-                    input(type="password" name="password" placeholder="password" class="form-control my-3",required)
+                    input(type="password" name="password" placeholder="password" class="form-control my-3",required)             
               .form-row
                 .col-lg-7
-                    input(type="submit" class="btn1 mt-3 mb-5" value="Log In")
-              a(href="/inscription") Don't have an acount ?
-                    
-             
-    
+                     input(type="submit" class="btn1 mt-3 mb-5" value="Log In")
+
+              a(href="/inscription"  ) Create an account
+              p
+                &nbsp;
+                 
+              
+        
+          
