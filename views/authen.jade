@@ -25,13 +25,19 @@ html(lang='fr')
           .col-lg-5
             p  Teilen
           .col-lg-7
-            form(action="/inscription" method="POST")
+            form(action="/authen" method="POST")
+              .form-row
+                  .col-lg-7
+                    p(style="color : red")=err_msg
               .form-row
                 .col-lg-7
                     input(type="email" name="email" placeholder="mail" rows="8" cols="45" minlength="6" class="form-control my-3",required)
               .form-row
                 .col-lg-7
                     input(type="password" name="password" placeholder="password" class="form-control my-3",required)
+              .form-row
+                .col-lg-7
+                    input(type="submit" value="Log in")
                     
              
     
