@@ -13,7 +13,8 @@ db.serialize(function() {
     */
 
     db.all(`
-            SELECT * FROM Users;
+            SELECT *
+            From Users;
     `, (err, rows)=>{
         console.log(rows)
     })

@@ -63,12 +63,12 @@ app.post('/authen', (req, res)=>{
     // Checking info & saving data
     err_msg = "2892";
     err = false;
-    db.all("SELECT * FROM Users WHERE email = ?", [req.body.email],
+    db.get("SELECT * FROM Users WHERE email = ?", [req.body.email],
     (err, row)=>{
-        if(row.length == 0){
+        if(typeof row === 'undefined'){
             err_msg = "There is no user with this email";
             err = true;
-        }else if(row[0].password != req.body.password){
+        }else if(row.password != req.body.password){
             err_msg = "Wrong password";
             err = true;
         }
@@ -79,9 +79,9 @@ app.post('/authen', (req, res)=>{
             }
             res.render('authen', data);
         }else{
-            req.session.user_id = row[0].id
-            req.session.pseudo = row[0].pseudo
-            req.session.email = row[0].email
+            req.session.user_id = row.id
+            req.session.pseudo = row.pseudo
+            req.session.email = row.email
             res.redirect('/');
         }
     });
