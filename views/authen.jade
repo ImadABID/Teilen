@@ -13,10 +13,27 @@ html(lang='fr')
       box-sizing: border-box;
       }
       body{
-      rgb(219,226,226)
-      }
+        background: rgb(219,226,226);
+        }
       .row{
       background: white;
+      border-radius: 30px;
+      box-shadow: 12px 12px 22px grey;
+      }
+      .btn1{
+        border: none;
+        outline: none;
+        height: 50px;
+        width: 100%;
+        background-color: black;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .btn1:hover{
+        background: white;
+        border: 1px solid;
+        color: black;
       }
   body
     section.Form.my-4.mx-5.pt-5
@@ -25,6 +42,7 @@ html(lang='fr')
           .col-lg-5
             p  Teilen
           .col-lg-7
+            h2.font-weight-bold.py-3 Inscription
             form(action="/inscription" method="POST")
               .form-row
                 .col-lg-7
@@ -32,6 +50,10 @@ html(lang='fr')
               .form-row
                 .col-lg-7
                     input(type="password" name="password" placeholder="password" class="form-control my-3",required)
+              .form-row
+                .col-lg-7
+                    input(type="submit" class="btn1 mt-3 mb-5" value="Register")
+              a(href="/inscription") Don't have an acount ?
                     
              
     
