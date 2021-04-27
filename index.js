@@ -30,7 +30,20 @@ app.get('/',(req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
-        res.send("Teilen<hr>Welcome " + req.session.pseudo);
+        let user = {
+            pseudo : req.session.pseudo,
+        }
+        db.all(
+            `
+                SELECT Posts.content, Posts.image_link, Posts.date, Users.pseudo
+                FROM Posts JOIN Users ON Posts.author_id =  Users.id;
+            `, (err, rows)=>{
+                let data = {
+                    user : user,
+                    posts : rows
+                }
+                res.render("main_no_style", data);
+        })
     }
 });
 

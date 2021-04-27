@@ -18,7 +18,7 @@ db.serialize(function() {
         CREATE TABLE IF NOT EXISTS Posts(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             author_id INTEGER,
-            date varchar(255),
+            date TEXT,
             content TEXT,
             image_link TEXT,
 
@@ -34,9 +34,9 @@ db.serialize(function() {
     `);
 
     db.run(`
-        INSERT INTO Posts(author_id, content)
+        INSERT INTO Posts(author_id, content, image_link, date)
         VALUES
-            (1,   "Welcome to Teilen");
+            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "2021-04-27 21:47:28" );
     `);
 });
 
