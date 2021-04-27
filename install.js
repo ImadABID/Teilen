@@ -27,6 +27,19 @@ db.serialize(function() {
     `);
 
     db.run(`
+        CREATE TABLE IF NOT EXISTS Comments(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            author_id INTEGER,
+            post_id INTEGER,
+            date TEXT,
+            content TEXT,
+
+            FOREIGN KEY (author_id) REFERENCES Users(id),
+            FOREIGN KEY (post_id) REFERENCES Posts(id)
+        );
+    `)
+
+    db.run(`
         INSERT INTO Users(pseudo, email, password)
         VALUES
             ("Abied",   "social@imad-abied.pro",    "eOxzkz2083!;z"),
@@ -37,6 +50,12 @@ db.serialize(function() {
         INSERT INTO Posts(author_id, content, image_link, date)
         VALUES
             (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "2021-04-27 21:47:28" );
+    `);
+
+    db.run(`
+        INSERT INTO Comments(author_id, post_id, content, date)
+        VALUES
+            (2, 1, "First comment ever !", "2021-04-27 22:37:31");
     `);
 });
 

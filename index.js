@@ -35,13 +35,28 @@ app.get('/',(req, res)=>{
         }
         db.all(
             `
-                SELECT Posts.content, Posts.image_link, Posts.date, Users.pseudo
+                SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id;
             `, (err, rows)=>{
+                /*
+                for(let i = 0; i < rows.length; i++){
+                    console.log(rows);
+                    db.all(`
+                        SELECT Users.pseudo, Comments.date, Comments.content
+                        FROM Comments
+                            JOIN Users ON Users.id = Comments.author_id
+                            JOIN Posts ON Posts.id = Comments.post_id
+                        WHERE Posts.id = ?;
+                    `, [rows[i].id], (sub_err, sub_rows)=>{
+                        rows[i].set("comments", sub_rows);
+                    })
+                }
+                */
                 let data = {
                     user : user,
                     posts : rows
                 }
+                console.log(typeof(rows[0]));
                 res.render("main_no_style", data);
         })
     }

@@ -4,6 +4,12 @@ var db = new sqlite3.Database('Data_Base.db');
 db.serialize(function() {
 
     db.all(`
+        SELECT * FROM Comments;
+    `, (err, rows)=>{
+        console.log(rows);
+    })
+
+    db.all(`
         SELECT * FROM Users;
     `, (err, rows)=>{
         console.log(rows);
