@@ -54,9 +54,8 @@ html(lang="fr")
                         li.list-group-item A second item
                         li.list-group-item A third item  
             .col-7
-                .row.no-gutters
-                    -for(var i = 0; i < posts.length; i++)
-                        
+                -for(var i = 0; i < posts.length; i++)
+                    .row.no-gutters
                             h2=posts[i].pseudo
                             p.fw-light=posts[i].date
                             h3=posts[i].content
