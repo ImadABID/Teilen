@@ -4,6 +4,8 @@ const app = express();
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('Data_Base.db');
 
+const {openDb} = require("./db");
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -26,39 +28,36 @@ app.use(session(
     }
 ))
 
-app.get('/',(req, res)=>{
+app.get('/', async (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
-        let user = {
-            pseudo : req.session.pseudo,
-        }
-        db.all(
+        let db_select = await openDb();
+        const rows = await db_select.all(
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id;
-            `, (err, rows)=>{
-                /*
-                for(let i = 0; i < rows.length; i++){
-                    console.log(rows);
-                    db.all(`
-                        SELECT Users.pseudo, Comments.date, Comments.content
-                        FROM Comments
-                            JOIN Users ON Users.id = Comments.author_id
-                            JOIN Posts ON Posts.id = Comments.post_id
-                        WHERE Posts.id = ?;
-                    `, [rows[i].id], (sub_err, sub_rows)=>{
-                        rows[i].set("comments", sub_rows);
-                    })
-                }
-                */
-                let data = {
-                    user : user,
-                    posts : rows
-                }
-                console.log(typeof(rows[0]));
-                res.render("main_no_style", data);
-        })
+            `
+        );
+        for(let i = 0; i < rows.length; i++){
+            const comments_rows = await db_select.all(`
+                SELECT Users.pseudo, Comments.date, Comments.content
+                FROM Comments
+                    JOIN Users ON Users.id = Comments.author_id
+                    JOIN Posts ON Posts.id = Comments.post_id
+                WHERE Posts.id = ?;
+            `, [rows[i].id]);
+            rows[i].comments = comments_rows;
+        }
+        console.log(rows);
+        let user = {
+            pseudo : req.session.pseudo,
+        }
+        let data = {
+            user : user,
+            posts : rows
+        }
+        res.render("main_no_style", data);
     }
 });
 

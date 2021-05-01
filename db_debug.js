@@ -23,6 +23,16 @@ db.serialize(function() {
             console.log(rows)
     })
 
+    db.all(`
+        SELECT Users.pseudo, Comments.date, Comments.content
+        FROM Comments
+            JOIN Users ON Users.id = Comments.author_id
+            JOIN Posts ON Posts.id = Comments.post_id
+        WHERE Posts.id = ?;
+    `, 1, (sub_err, sub_rows)=>{
+        console.log(sub_rows);
+    })
+
 });
 
 db.close();

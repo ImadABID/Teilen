@@ -9,3 +9,10 @@ table
             td=posts[i].content
             td
                 img(src = posts[i].image_link)
+            td
+                table
+                    -for(var j = 0; j < posts[i].comments.length; j++)
+                        tr
+                            td=posts[i].comments[j].pseudo
+                            td=posts[i].comments[j].date
+                            td=posts[i].comments[j].content
