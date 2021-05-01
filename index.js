@@ -57,7 +57,7 @@ app.get('/',(req, res)=>{
                     posts : rows
                 }
                 console.log(typeof(rows[0]));
-                res.render("main_no_style", data);
+                res.render("main", data);
         })
     }
 });
