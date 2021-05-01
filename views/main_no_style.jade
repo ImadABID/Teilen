@@ -1,0 +1,11 @@
+p Welcom 
+    span=user.pseudo
+hr
+table
+    -for(var i = 0; i < posts.length; i++)
+        tr
+            td=posts[i].pseudo
+            td=posts[i].date
+            td=posts[i].content
+            td
+                img(src = posts[i].image_link)
