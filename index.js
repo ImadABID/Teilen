@@ -30,7 +30,8 @@ app.get('/',(req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
-        res.send("Teilen<hr>Welcome " + req.session.pseudo);
+        //res.send("Teilen<hr>Welcome " + req.session.pseudo);
+        res.render('main');
     }
 });
 
@@ -90,5 +91,6 @@ app.post('/authen', (req, res)=>{
 app.get('/deconnect', (req, res)=>{
     req.session.destroy()
 })
+
 
 app.listen(3030);
