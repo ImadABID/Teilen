@@ -49,7 +49,6 @@ app.get('/', async (req, res)=>{
             `, [rows[i].id]);
             rows[i].comments = comments_rows;
         }
-        console.log(rows);
         let user = {
             pseudo : req.session.pseudo,
         }
@@ -60,6 +59,41 @@ app.get('/', async (req, res)=>{
         res.render("main", data);
     }
 });
+
+app.get('/show_post', async (req, res)=>{
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        let db_select = await openDb();
+
+        const pub = await db_select.get(`
+            SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
+            FROM Posts JOIN Users ON Posts.author_id =  Users.id
+            WHERE Posts.id = ?;
+        `,[req.query.post_id]);
+    
+        const comments = await db_select.all(`
+            SELECT Users.pseudo, Comments.date, Comments.content
+            FROM Comments
+                JOIN Users ON Users.id = Comments.author_id
+                JOIN Posts ON Posts.id = Comments.post_id
+            WHERE Posts.id = ?;
+        `, [req.query.post_id]);
+    
+        pub.comments = comments;
+
+        let user = {
+            pseudo : req.session.pseudo,
+        }
+
+        let data = {
+            user : user,
+            post : pub
+        }
+    
+        res.render("show_post", data);
+    }
+})
 
 app.get('/inscription', (req, res)=>{
 

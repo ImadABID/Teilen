@@ -1,0 +1,15 @@
+p Welcom 
+    span=user.pseudo
+ul
+    li=post.pseudo
+    li=post.date
+    li=post.content
+    li
+        img(src = post.image_link)
+    li
+        table
+            -for(var j = 0; j < post.comments.length; j++)
+                tr
+                    td=post.comments[j].pseudo
+                    td=post.comments[j].date
+                    td=post.comments[j].content
