@@ -38,7 +38,10 @@ html(lang="fr")
                 color : black ;
                 
                 border: solid ;  
-            }          
+            } 
+            .list-group{
+                border-radius: 30px;
+            }        
 
   body(style='width: auto ;margin: auto;')
     nav.navbar.navbar-light.bg-light
@@ -57,9 +60,18 @@ html(lang="fr")
                 -for(var i = 0; i < posts.length; i++)
                     .row.no-gutters
                             h2=posts[i].pseudo
-                            p.fw-light=posts[i].date
+                            small=posts[i].date
                             h3=posts[i].content
                             img.img-thumbnail(src=posts[i].image_link)
+                            span.badge.rounded-pill.bg-light.text-dark Comments :
+
+                            -for(var j = 0; j < posts[i].comments.length; j++)
+                                .list-group
+                                    a.list-group-item.list-group-item-action(href='#' aria-current='true')
+                                        .d-flex.w-100.justify-content-between
+                                            h5.mb-1=posts[i].comments[j].pseudo 
+                                            small=posts[i].comments[j].date
+                                        p.mb-1=posts[i].comments[j].content
 
 
                 .row.no-gutters
