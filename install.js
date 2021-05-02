@@ -49,13 +49,16 @@ db.serialize(function() {
     db.run(`
         INSERT INTO Posts(author_id, content, image_link, date)
         VALUES
-            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "2021-04-27 21:47:28" );
+            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "2021-04-27 21:47:28" ),
+            (2,   "Second post for test", "https://images.bfmtv.com/hWqWgLneICAMGTvbfMPHL2-HXJo=/0x0:1280x720/images/Resume-Barcelone-1-4-Paris-SG-Ligue-des-champions-8e-de-finale-aller-970499.jpg", "2021-05-02 22:41:18" );
     `);
 
     db.run(`
         INSERT INTO Comments(author_id, post_id, content, date)
         VALUES
-            (2, 1, "First comment ever !", "2021-04-27 22:37:31");
+            (2, 1, "First comment ever !", "2021-04-27 22:37:31"),
+            (1, 2, "Psg is the best !", "2021-05-02 22:44:21"),
+            (2, 2, "It a master piece", "2021-05-02 22:45:16");
     `);
 });
 
