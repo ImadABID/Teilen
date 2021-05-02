@@ -57,7 +57,7 @@ app.get('/', async (req, res)=>{
             user : user,
             posts : rows
         }
-        res.render("main_no_style", data);
+        res.render("main", data);
     }
 });
 
@@ -117,5 +117,6 @@ app.post('/authen', (req, res)=>{
 app.get('/deconnect', (req, res)=>{
     req.session.destroy()
 })
+
 
 app.listen(3030);
