@@ -91,7 +91,7 @@ app.get('/show_post', async (req, res)=>{
             post : pub
         }
     
-        res.render("show_post", data);
+        res.render("show_post_no_style", data);
     }
 })
 
@@ -150,6 +150,7 @@ app.post('/authen', (req, res)=>{
 
 app.get('/deconnect', (req, res)=>{
     req.session.destroy()
+    res.redirect('/')
 })
 
 
