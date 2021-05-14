@@ -156,12 +156,20 @@ app.get('/deconnect', (req, res)=>{
 })
 
 app.post('/add_post',(req, res)=>{
-    db.run(`
-    INSERT INTO Posts(author_id, content, image_link, date)
-    VALUES
-        (?, ?, ?, datetime('now'));
-    `, req.session.user_id, req.body.content, req.body.image_link);
-    res.redirect('/');
+    db.serialize(()=>{
+        db.run(`
+        INSERT INTO Posts(author_id, content, image_link, date)
+        VALUES
+            (?, ?, ?, datetime('now'));
+        `, req.session.user_id, req.body.content, req.body.image_link);
+
+        db.get(`
+        SELECT Posts.id FROM Posts
+        WHERE author_id = ? AND content = ?;
+        `, [req.session.user_id, req.body.content], (err, raw)=>{
+            res.redirect('/#post'+raw.id);
+        })
+    })
 })
 
 app.listen(3030);

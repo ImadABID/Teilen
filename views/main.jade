@@ -69,7 +69,7 @@ html(lang="fr")
                         br
                         input(type="submit" value="Add it !")
                 -for(var i = 0; i < posts.length; i++)
-                    .row.no-gutters
+                    .row.no-gutters(id=`post${posts[i].id}`)
                             h2=posts[i].pseudo
                             small=posts[i].date
                             h3=posts[i].content
