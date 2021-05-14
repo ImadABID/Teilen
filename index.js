@@ -42,7 +42,7 @@ app.get('/', async (req, res)=>{
         );
         for(let i = 0; i < rows.length; i++){
             const comments_rows = await db_select.all(`
-                SELECT Users.pseudo, Comments.date, Comments.content
+                SELECT Comments.id, Users.pseudo, Comments.date, Comments.content
                 FROM Comments
                     JOIN Users ON Users.id = Comments.author_id
                     JOIN Posts ON Posts.id = Comments.post_id
@@ -168,6 +168,25 @@ app.post('/add_post',(req, res)=>{
         WHERE author_id = ? AND content = ?;
         `, [req.session.user_id, req.body.content], (err, raw)=>{
             res.redirect('/#post'+raw.id);
+        })
+    })
+})
+
+app.post('/add_comment',(req, res)=>{
+    db.serialize(()=>{
+        db.run(`
+        INSERT INTO Comments(author_id, post_id, content, date)
+        VALUES
+            (?, ?, ?, datetime('now'));
+        `, req.session.user_id, req.query.post_id, req.body.comment);
+        
+        db.get(`
+        SELECT Comments.id
+        FROM Comments
+        WHERE author_id = ? AND post_id = ? AND content = ?;
+        `, [req.session.user_id, req.query.post_id, req.body.comment], (err, raw)=>{
+            //res.redirect('/#comment'+raw.id);
+            res.redirect('/#post'+req.query.post_id);
         })
     })
 })

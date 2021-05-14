@@ -72,17 +72,26 @@ html(lang="fr")
                     .row.no-gutters(id=`post${posts[i].id}`)
                             h2=posts[i].pseudo
                             small=posts[i].date
-                            h3=posts[i].content
-                            img.img-thumbnail(src=posts[i].image_link)
+                            p=posts[i].content
+                            if(posts[i].image_link)
+                                p(style="text-align:center;")
+                                    img(src=posts[i].image_link width="100%")
                             span.badge.rounded-pill.bg-light.text-dark Comments :
 
                             -for(var j = 0; j < posts[i].comments.length; j++)
                                 .list-group
-                                    a.list-group-item.list-group-item-action(href='#' aria-current='true')
+                                    a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
                                         .d-flex.w-100.justify-content-between
                                             h5.mb-1=posts[i].comments[j].pseudo 
                                             small=posts[i].comments[j].date
                                         p.mb-1=posts[i].comments[j].content
+                            .list-group
+                                a.list-group-item.list-group-item-action(aria-current='true')
+                                    form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                        input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
+                                        br
+                                        input(type="submit" value="Add the comment")
+                                    
 
             .col-3 
                 p kenfzlkenfzeknfzkne
