@@ -36,7 +36,8 @@ app.get('/', async (req, res)=>{
         const rows = await db_select.all(
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
-                FROM Posts JOIN Users ON Posts.author_id =  Users.id;
+                FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                ORDER BY Posts.date DESC;
             `
         );
         for(let i = 0; i < rows.length; i++){
@@ -45,7 +46,8 @@ app.get('/', async (req, res)=>{
                 FROM Comments
                     JOIN Users ON Users.id = Comments.author_id
                     JOIN Posts ON Posts.id = Comments.post_id
-                WHERE Posts.id = ?;
+                WHERE Posts.id = ?
+                ORDER BY Comments.date;
             `, [rows[i].id]);
             rows[i].comments = comments_rows;
         }
@@ -153,5 +155,13 @@ app.get('/deconnect', (req, res)=>{
     res.redirect('/')
 })
 
+app.post('/add_post',(req, res)=>{
+    db.run(`
+    INSERT INTO Posts(author_id, content, image_link, date)
+    VALUES
+        (?, ?, ?, datetime('now'));
+    `, req.session.user_id, req.body.content, req.body.image_link);
+    res.redirect('/');
+})
 
 app.listen(3030);

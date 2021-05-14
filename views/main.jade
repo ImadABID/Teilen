@@ -60,6 +60,14 @@ html(lang="fr")
                         li.list-group-item A third item 
 
             .col-7
+                .row.no-gutters
+                    h3 Add a post
+                    form(action="/add_post" method="POST")
+                        input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
+                        br
+                        input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
+                        br
+                        input(type="submit" value="Add it !")
                 -for(var i = 0; i < posts.length; i++)
                     .row.no-gutters
                             h2=posts[i].pseudo
@@ -76,10 +84,6 @@ html(lang="fr")
                                             small=posts[i].comments[j].date
                                         p.mb-1=posts[i].comments[j].content
 
-
-                .row.no-gutters
-                    
-                        p k,ckz,ckz,ckz
             .col-3 
                 p kenfzlkenfzeknfzkne
 
