@@ -43,19 +43,29 @@ app.get('/', async (req, res)=>{
         for(let i = 0; i < rows.length; i++){
             // Getting reacts
             const reacts = await db_select.all(`
-                SELECT COUNT(*)
+                SELECT Reacts.react, COUNT(*)
                 FROM Reacts
                     JOIN Posts ON Reacts.post_id = Posts.id
                 WHERE Reacts.post_id = ?
                 GROUP BY Reacts.react;
             `,[rows[i].id]);
-            console.log(reacts)
-            if(reacts.length != 0){
+
+            if(reacts.length == 2){
                 rows[i].downs = reacts[0]['COUNT(*)'];
                 rows[i].ups = reacts[1]['COUNT(*)'];
             }else{
-                rows[i].downs = 0;
-                rows[i].ups = 0;
+                if(reacts.length == 1){
+                    if(reacts[0].react == 0){
+                        rows[i].downs = reacts[0]['COUNT(*)'];
+                        rows[i].ups = 0;
+                    }else{
+                        rows[i].downs = 0;
+                        rows[i].ups = reacts[0]['COUNT(*)'];
+                    }
+                }else{
+                    rows[i].downs = 0;
+                    rows[i].ups = 0;
+                }
             }
 
             // Getting comments
@@ -207,6 +217,16 @@ app.post('/add_comment',(req, res)=>{
             res.redirect('/#post'+req.query.post_id);
         })
     })
+})
+
+app.post('/add_react',(req, res)=>{
+    db.run(`
+    INSERT INTO Reacts(reactor_id, post_id, react, date)
+    VALUES
+        (?, ?, ?, datetime('now'));
+    `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
+        res.redirect('/#post'+req.query.post_id);
+    });
 })
 
 app.listen(3030);

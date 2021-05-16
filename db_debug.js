@@ -45,13 +45,13 @@ db.serialize(function() {
     */
 
     db.all(`
-        SELECT COUNT(*)
+        SELECT Reacts.react, COUNT(*)
         FROM Reacts
             JOIN Posts ON Reacts.post_id = Posts.id
         WHERE Reacts.post_id = 1
         GROUP BY Reacts.react;
     `, (err, raw)=>{
-        console.log(raw[1]['COUNT(*)']);
+        console.log(raw);
     })
 
 });

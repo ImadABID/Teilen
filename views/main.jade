@@ -110,8 +110,12 @@ html(lang="fr")
                                         div(style="width:80%; margin:auto;")
                                             table(style="width:100%; text-align:center;")
                                                 tr
-                                                    td=`${posts[i].ups} Ups`
-                                                    td=`${posts[i].downs} Downs`
+                                                    td
+                                                        form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                            input(type='submit' value=`${posts[i].ups} Ups`)
+                                                    td
+                                                        form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                            input(type='submit' value=`${posts[i].downs} Downs`)
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
 
                                         -for(var j = 0; j < posts[i].comments.length; j++)
