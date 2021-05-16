@@ -107,6 +107,11 @@ html(lang="fr")
                                         if(posts[i].image_link)
                                             p(style="text-align:center;")
                                                 img(src=posts[i].image_link width="100%")
+                                        div(style="width:80%; margin:auto;")
+                                            table(style="width:100%; text-align:center;")
+                                                tr
+                                                    td=`${posts[i].ups} Ups`
+                                                    td=`${posts[i].downs} Downs`
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
 
                                         -for(var j = 0; j < posts[i].comments.length; j++)
@@ -130,7 +135,5 @@ html(lang="fr")
                                     &nbsp;
                                 p
                                     |Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum rerum iure error corrupti cumque sint obcaecati dolore ullam nesciunt animi iusto non quod eligendi, provident vitae fugiat voluptatibus accusamus at.
-
-
 
 

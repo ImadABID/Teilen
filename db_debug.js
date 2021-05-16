@@ -2,7 +2,7 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('Data_Base.db');
 
 db.serialize(function() {
-
+    /*
     db.all(`
         SELECT * FROM Comments;
     `, (err, rows)=>{
@@ -31,6 +31,27 @@ db.serialize(function() {
         WHERE Posts.id = ?;
     `, 1, (sub_err, sub_rows)=>{
         console.log(sub_rows);
+    })
+    
+
+    db.get(`
+        SELECT Comments.id, Users.pseudo, Comments.date, Comments.content
+            FROM Comments
+                JOIN Users ON Users.id = Comments.author_id
+                JOIN Posts ON Posts.id = Comments.post_id;
+    `, (err, raw)=>{
+        console.log(raw);
+    })
+    */
+
+    db.all(`
+        SELECT COUNT(*)
+        FROM Reacts
+            JOIN Posts ON Reacts.post_id = Posts.id
+        WHERE Reacts.post_id = 1
+        GROUP BY Reacts.react;
+    `, (err, raw)=>{
+        console.log(raw[1]['COUNT(*)']);
     })
 
 });

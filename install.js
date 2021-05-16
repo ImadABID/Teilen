@@ -40,10 +40,24 @@ db.serialize(function() {
     `)
 
     db.run(`
+        CREATE TABLE IF NOT EXISTS Reacts(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            reactor_id INTEGER,
+            post_id INTEGER,
+            date TEXT,
+            react INTEGER,
+
+            FOREIGN KEY (reactor_id) REFERENCES Users(id),
+            FOREIGN KEY (post_id) REFERENCES Posts(id)
+        );
+    `)
+
+    db.run(`
         INSERT INTO Users(pseudo, email, password)
         VALUES
             ("Abied",   "social@imad-abied.pro",    "eOxzkz2083!;z"),
-            ("Ahalli",  "social@med-ahalli.pro",    "s#{la_brute!f");
+            ("Ahalli",  "social@med-ahalli.pro",    "s#{la_brute!f"),
+            ("Linus",  "linus.torvalds@linux-fondation.org", "a2khSDeu");
     `);
 
     db.run(`
@@ -59,6 +73,14 @@ db.serialize(function() {
             (2, 1, "First comment ever !", "2021-04-27 22:37:31"),
             (1, 2, "Psg is the best !", "2021-05-02 22:44:21"),
             (2, 2, "It a master piece", "2021-05-02 22:45:16");
+    `);
+
+    db.run(`
+        INSERT INTO Reacts(reactor_id, post_id, react, date)
+        VALUES
+            (1, 1, 1, "2021-05-16 21:37:22"),
+            (2, 1, -1, "2021-05-16 21:38:17"),
+            (3, 1, 1, "2021-05-16 21:38:17");
     `);
 });
 

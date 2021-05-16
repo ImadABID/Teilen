@@ -41,6 +41,24 @@ app.get('/', async (req, res)=>{
             `
         );
         for(let i = 0; i < rows.length; i++){
+            // Getting reacts
+            const reacts = await db_select.all(`
+                SELECT COUNT(*)
+                FROM Reacts
+                    JOIN Posts ON Reacts.post_id = Posts.id
+                WHERE Reacts.post_id = ?
+                GROUP BY Reacts.react;
+            `,[rows[i].id]);
+            console.log(reacts)
+            if(reacts.length != 0){
+                rows[i].downs = reacts[0]['COUNT(*)'];
+                rows[i].ups = reacts[1]['COUNT(*)'];
+            }else{
+                rows[i].downs = 0;
+                rows[i].ups = 0;
+            }
+
+            // Getting comments
             const comments_rows = await db_select.all(`
                 SELECT Comments.id, Users.pseudo, Comments.date, Comments.content
                 FROM Comments
