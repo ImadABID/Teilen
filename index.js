@@ -220,13 +220,40 @@ app.post('/add_comment',(req, res)=>{
 })
 
 app.post('/add_react',(req, res)=>{
-    db.run(`
-    INSERT INTO Reacts(reactor_id, post_id, react, date)
-    VALUES
-        (?, ?, ?, datetime('now'));
-    `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
-        res.redirect('/#post'+req.query.post_id);
-    });
+    //Testing if the user has already a react on the post
+    db.all(`
+        SELECT id, react
+        FROM Reacts
+        WHERE reactor_id = ? AND post_id = ?;
+    `,[req.session.user_id, req.query.post_id],(err, rows) =>{
+        if(rows.length == 0){
+            db.run(`
+            INSERT INTO Reacts(reactor_id, post_id, react, date)
+            VALUES
+                (?, ?, ?, datetime('now'));
+            `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
+                res.redirect('/#post'+req.query.post_id);
+            });
+        }else{
+            if(rows[0].react == req.query.react){
+                res.redirect('/#post'+req.query.post_id);
+            }else{
+
+                db.run(`
+                DELETE FROM Reacts
+                WHERE id = ?;
+                `,rows[0].id);
+
+                db.run(`
+                INSERT INTO Reacts(reactor_id, post_id, react, date)
+                VALUES
+                    (?, ?, ?, datetime('now'));
+                `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
+                    res.redirect('/#post'+req.query.post_id);
+                });
+            }
+        }
+    })
 })
 
 app.listen(3030);
