@@ -8,136 +8,103 @@ html(lang="fr")
         link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1' crossorigin='anonymous')
         style.
 
-            .row.no-gutters {
+            body{
+                padding-top: 5px;
+                background: white;
+                width: 100%;
+                margin: auto;
+            }
+            #navbar{
+                color:white;
+            }
+            .row.no-gutters{
                 margin:30px;
-                
                 box-sizing: border-box;
                 border-radius: 20px;
                 padding: 20px;
                 border-color: green;
-                box-shadow: 4px 4px 4px 4px green ;
+                box-shadow: 1px 1px 1px 1px green;
             }
-            body{
-                width:100%;
-                background: white ;
-            }
-
-            .a{
-                background: green;
-            }
-            .container{
-                background: white ;
-            }
-
-            .col-3 {
-                color : black ;
-                border-radius: 10px;
-            }
-            .col-7  {
-                color : black ;
-                border: solid ;
-                border-radius: 10px;
-                border-width:  1px 1px 1px;
-            }
-            .col-2  {
-                color : black ;
-                border-radius: 10px;
-            }
-
             .list-group{
-                border-radius: 30px;
-                margin :6px;
-            }
-            html,body,header,.view{
-                font-family: 'josefin sans', sans-serif;
-                scroll-behavior: smooth;
+                border-radius :30px;
+                margin: 6px;
             }
 
 
-            .top-nav-collapse{
-                background-color: indigo;
-            }
 
-            .view{
-                background-size: cover;
-            }
-            h6{
-                font-weight: bolder;
-            }     
+    body
 
-  body
-        nav.navbar.fixed-top.navbar-expand-lg.navbar-dark.scrolling-navbar.bg-secondary
-            .container-fluid
-                a.navbar-brand(href='#')
-                    img.d-inline-block.align-text-top(src="https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg" width='auto' height='30')
-                    | Teilen
-                .d-grid.gap-2.d-md-flex.justify-content-md-end
-                    a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') About
-                    a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') Contact
-                    a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect 
-        p
-            &nbsp;
-        main
+            nav.navbar.navbar.sticky-top.navbar-dark.bg-dark
+                .container-fluid
+                    a.navbar-brand(href='#')
+                        img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
+                        |Tailen
+                    .d-grid.gap-2.d-md-flex.justify-content-md-end
+                        a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') About
+                        a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') Contact
+                        a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
 
-            .container-fluid
+
+            .container 
                 .row
-                        .col-3  
-                            .w-25.sticky-top
-                                p
-                                    &nbsp; 
-                                ul.list-group.list-group-flush
-                                    li.list-group-item An item
-                                    li.list-group-item A second item
-                                    li.list-group-item A third item 
+                    .col-md-4.me-auto
+                        .w-25.sticky-top
+                            div(style="height: 50px;")
+                            .well
+                                p 
+                                | kcquzchzuh
+                                
+                    .col-md-6.me-auto
+                        .overflow-auto
 
-                        .col-7  
-                            .row.no-gutters
-                                h3 Add a post
-                                form(action="/add_post" method="POST")
-                                    input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
-                                    br
-                                    input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
-                                    br
-                                    input(type="submit" value="Add it !")
-                            -for(var i = 0; i < posts.length; i++)
-                                .row.no-gutters(id=`post${posts[i].id}`)
-                                        h5=posts[i].pseudo
-                                        small=posts[i].date
-                                        h4=posts[i].content
-                                        if(posts[i].image_link)
-                                            p(style="text-align:center;")
-                                                img(src=posts[i].image_link width="100%")
-                                        div(style="width:80%; margin:auto;")
-                                            table(style="width:100%; text-align:center;")
-                                                tr
-                                                    td
-                                                        form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                            input(type='submit' value=`${posts[i].ups} Ups`)
-                                                    td
-                                                        form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
-                                                            input(type='submit' value=`${posts[i].downs} Downs`)
-                                        span.badge.rounded-pill.bg-light.text-dark Comments :
+                            .well
 
-                                        -for(var j = 0; j < posts[i].comments.length; j++)
+                                .row.no-gutters
+                                    h3 Add a post
+                                    form(action="/add_post" method="POST")
+                                        input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
+                                        br
+                                        input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
+                                        br
+                                        input(type="submit" value="Add it !")
+                                -for(var i = 0; i < posts.length; i++)
+                                    .row.no-gutters(id=`post${posts[i].id}`)
+                                            h5=posts[i].pseudo
+                                            small=posts[i].date
+                                            h4=posts[i].content
+                                            if(posts[i].image_link)
+                                                p(style="text-align:center;")
+                                                    img(src=posts[i].image_link width="100%")
+                                            div(style="width:80%; margin:auto;")
+                                                table(style="width:100%; text-align:center;")
+                                                    tr
+                                                        td
+                                                            form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                                input(type='submit' value=`${posts[i].ups} Ups`)
+                                                        td
+                                                            form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                                input(type='submit' value=`${posts[i].downs} Downs`)
+                                            span.badge.rounded-pill.bg-light.text-dark Comments :
+
+                                            -for(var j = 0; j < posts[i].comments.length; j++)
+                                                .list-group
+                                                    a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
+                                                        .d-flex.w-100.justify-content-between
+                                                            h6=posts[i].comments[j].pseudo 
+                                                            small=posts[i].comments[j].date
+                                                        p.mb-1=posts[i].comments[j].content
                                             .list-group
-                                                a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
-                                                    .d-flex.w-100.justify-content-between
-                                                        h6=posts[i].comments[j].pseudo 
-                                                        small=posts[i].comments[j].date
-                                                    p.mb-1=posts[i].comments[j].content
-                                        .list-group
-                                            a.list-group-item.list-group-item-action(aria-current='true')
-                                                form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
-                                                    input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
-                                                    br
-                                                    input(type="submit" value="Add the comment")
-                                                
-
-                        .col-2 
-                            .w-25.sticky-top
+                                                a.list-group-item.list-group-item-action(aria-current='true')
+                                                    form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                                        input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
+                                                        br
+                                                        input(type="submit" value="Add the comment")
+                    .col-md-2.me-auto
+                        .w-25.sticky-top
+                            div(style="height: 60px;")
+                            .well 
                                 p
-                                    &nbsp;
-                                p
-                                    |Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum rerum iure error corrupti cumque sint obcaecati dolore ullam nesciunt animi iusto non quod eligendi, provident vitae fugiat voluptatibus accusamus at.
+                                    |rfnajznfjanfaj
+                                
 
 
