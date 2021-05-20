@@ -9,7 +9,7 @@ html(lang="fr")
         style.
 
             body{
-                padding-top: 5px;
+                padding-top: 0px;
                 background: white;
                 width: 100%;
                 margin: auto;
@@ -45,60 +45,65 @@ html(lang="fr")
                         a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
 
 
-            .container 
+            .container-fluid
                 .row
-                    .col-md-4.me-auto
+                    .col-md-3.me-auto
                         .w-25.sticky-top
                             div(style="height: 50px;")
                             .well
                                 p 
                                 | kcquzchzuh
                                 
-                    .col-md-6.me-auto
-                        .overflow-auto
-
-                            .well
-
-                                .row.no-gutters
-                                    h3 Add a post
-                                    form(action="/add_post" method="POST")
-                                        input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
-                                        br
-                                        input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
-                                        br
-                                        input(type="submit" value="Add it !")
-                                -for(var i = 0; i < posts.length; i++)
-                                    .row.no-gutters(id=`post${posts[i].id}`)
-                                            h5=posts[i].pseudo
-                                            small=posts[i].date
-                                            h4=posts[i].content
-                                            if(posts[i].image_link)
-                                                p(style="text-align:center;")
-                                                    img(src=posts[i].image_link width="100%")
-                                            div(style="width:80%; margin:auto;")
-                                                table(style="width:100%; text-align:center;")
-                                                    tr
-                                                        td
-                                                            form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                                input(type='submit' value=`${posts[i].ups} Ups`)
-                                                        td
-                                                            form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
-                                                                input(type='submit' value=`${posts[i].downs} Downs`)
-                                            span.badge.rounded-pill.bg-light.text-dark Comments :
-
-                                            -for(var j = 0; j < posts[i].comments.length; j++)
-                                                .list-group
-                                                    a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
-                                                        .d-flex.w-100.justify-content-between
-                                                            h6=posts[i].comments[j].pseudo 
-                                                            small=posts[i].comments[j].date
-                                                        p.mb-1=posts[i].comments[j].content
+                    .col-md-7.me-auto
+                        .well  
+                            .row.no-gutters
+                                h3 Add a post
+                                form(action="/add_post" method="POST")
+                                    input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
+                                    br
+                                    input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
+                                    br
+                                    span Select your post tag 
+                                    select(name="tag_from_list" required)
+                                        - for(let i = 0; i < post_tags.length; i++)
+                                            option(value=post_tags[i].tag)=post_tags[i].tag
+                                        option(value='other') Not in the list
+                                    input(name="tag_new" type="text" placeholder="Not in the list ? Write it here." style="margin:5px;")
+                                    br
+                                    input(type="submit" value="Add it !")
+                            -for(var i = 0; i < posts.length; i++)
+                                .row.no-gutters(id=`post${posts[i].id}`)
+                                    p(style="text-align : right;")=posts[i].tag
+                                    h5=posts[i].pseudo
+                                    small=posts[i].date
+                                    h4=posts[i].content
+                                    if(posts[i].image_link)
+                                        p(style="text-align:center;")
+                                            img(src=posts[i].image_link width="100%")
+                                    div(style="width:80%; margin:auto;")
+                                        table(style="width:100%; text-align:center;")
+                                            tr
+                                                td
+                                                    form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                        input(type='submit' value=`${posts[i].ups} Ups`)
+                                                td
+                                                    form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                        input(type='submit' value=`${posts[i].downs} Downs`)
+                                        span.badge.rounded-pill.bg-light.text-dark Comments :
+                                        
+                                        -for(var j = 0; j < posts[i].comments.length; j++)
                                             .list-group
-                                                a.list-group-item.list-group-item-action(aria-current='true')
-                                                    form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
-                                                        input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
-                                                        br
-                                                        input(type="submit" value="Add the comment")
+                                                a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
+                                                    .d-flex.w-100.justify-content-between
+                                                        h6=posts[i].comments[j].pseudo 
+                                                        small=posts[i].comments[j].date
+                                                    p.mb-1=posts[i].comments[j].content
+                                        .list-group
+                                            a.list-group-item.list-group-item-action(aria-current='true')
+                                                form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                                    input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
+                                                    br
+                                                    input(type="submit" value="Add the comment")
                     .col-md-2.me-auto
                         .w-25.sticky-top
                             div(style="height: 60px;")

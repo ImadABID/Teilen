@@ -21,6 +21,7 @@ db.serialize(function() {
             date TEXT,
             content TEXT,
             image_link TEXT,
+            tag TEXT,
 
             FOREIGN KEY (author_id) REFERENCES Users(id)
         );
@@ -61,10 +62,10 @@ db.serialize(function() {
     `);
 
     db.run(`
-        INSERT INTO Posts(author_id, content, image_link, date)
+        INSERT INTO Posts(author_id, content, image_link, tag, date)
         VALUES
-            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "2021-04-27 21:47:28" ),
-            (2,   "Second post for test", "https://images.bfmtv.com/hWqWgLneICAMGTvbfMPHL2-HXJo=/0x0:1280x720/images/Resume-Barcelone-1-4-Paris-SG-Ligue-des-champions-8e-de-finale-aller-970499.jpg", "2021-05-02 22:41:18" );
+            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "nature", "2021-04-27 21:47:28" ),
+            (2,   "Second post for test", "https://images.bfmtv.com/hWqWgLneICAMGTvbfMPHL2-HXJo=/0x0:1280x720/images/Resume-Barcelone-1-4-Paris-SG-Ligue-des-champions-8e-de-finale-aller-970499.jpg", "sport", "2021-05-02 22:41:18" );
     `);
 
     db.run(`

@@ -35,7 +35,7 @@ app.get('/', async (req, res)=>{
         let db_select = await openDb();
         const rows = await db_select.all(
             `
-                SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
+                SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id
                 ORDER BY Posts.date DESC;
             `
@@ -79,12 +79,18 @@ app.get('/', async (req, res)=>{
             `, [rows[i].id]);
             rows[i].comments = comments_rows;
         }
+        const post_tags = await db_select.all(`
+            SELECT tag
+            FROM Posts
+            GROUP BY tag;
+        `)
         let user = {
             pseudo : req.session.pseudo,
         }
         let data = {
             user : user,
-            posts : rows
+            posts : rows,
+            post_tags : post_tags
         }
         res.render("main", data);
     }
@@ -185,12 +191,21 @@ app.get('/deconnect', (req, res)=>{
 
 app.post('/add_post',(req, res)=>{
     db.serialize(()=>{
-        db.run(`
-        INSERT INTO Posts(author_id, content, image_link, date)
-        VALUES
-            (?, ?, ?, datetime('now'));
-        `, req.session.user_id, req.body.content, req.body.image_link);
+        if(req.body.tag_new){
+            db.run(`
+            INSERT INTO Posts(author_id, content, image_link, tag, date)
+            VALUES
+                (?, ?, ?, ?, datetime('now'));
+            `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
+        }else{
+            db.run(`
+            INSERT INTO Posts(author_id, content, image_link, tag, date)
+            VALUES
+                (?, ?, ?, ?, datetime('now'));
+            `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_from_list);
+        }
 
+        // Getting post id for redirection and jumping into it
         db.get(`
         SELECT Posts.id FROM Posts
         WHERE author_id = ? AND content = ?;
