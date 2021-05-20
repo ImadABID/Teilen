@@ -32,6 +32,7 @@ db.serialize(function() {
     `, 1, (sub_err, sub_rows)=>{
         console.log(sub_rows);
     })
+    */
     
 
     db.get(`
@@ -42,8 +43,8 @@ db.serialize(function() {
     `, (err, raw)=>{
         console.log(raw);
     })
-    */
-
+    
+    /*
     db.all(`
         SELECT Reacts.react, COUNT(*)
         FROM Reacts
@@ -53,7 +54,7 @@ db.serialize(function() {
     `, (err, raw)=>{
         console.log(raw);
     })
-
+    */
 });
 
 db.close();

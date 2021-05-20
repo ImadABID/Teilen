@@ -74,7 +74,7 @@ html(lang="fr")
                 .d-grid.gap-2.d-md-flex.justify-content-md-end
                     a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') About
                     a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') Contact
-                    a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect 
+                    a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
         p
             &nbsp;
         main
@@ -98,9 +98,17 @@ html(lang="fr")
                                     br
                                     input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
                                     br
+                                    span Select your post tag 
+                                    select(name="tag_from_list" required)
+                                        - for(let i = 0; i < post_tags.length; i++)
+                                            option(value=post_tags[i].tag)=post_tags[i].tag
+                                        option(value='other') Not in the list
+                                    input(name="tag_new" type="text" placeholder="Not in the list ? Write it here." style="margin:5px;")
+                                    br
                                     input(type="submit" value="Add it !")
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
+                                        p(style="text-align : right;")=posts[i].tag
                                         h5=posts[i].pseudo
                                         small=posts[i].date
                                         h4=posts[i].content
