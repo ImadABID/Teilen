@@ -5,14 +5,16 @@ html(lang="fr")
         title Accueil
         link(rel='icon' type='image/x-icon' href='assets/favicon.ico')
         link(href='css/styles.css' rel='stylesheet')
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
         link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1' crossorigin='anonymous')
         style.
 
             body{
                 padding-top: 0px;
-                background: white;
                 width: 100%;
                 margin: auto;
+                
+
             }
             #navbar{
                 color:white;
@@ -22,13 +24,52 @@ html(lang="fr")
                 box-sizing: border-box;
                 border-radius: 20px;
                 padding: 20px;
-                border-color: green;
-                box-shadow: 1px 1px 1px 1px green;
+                border-color: gray;
+                box-shadow: 1px 2px 1px 3px gray;
+                background: white ;
             }
             .list-group{
                 border-radius :30px;
-                margin: 6px;
+                margin: 3px;
             }
+            .col-md-3.me-auto{
+       
+                background: url('https://cdn.pixabay.com/photo/2016/10/22/17/06/gradient-1761190_1280.jpg')          
+            }
+            .col-md-2.me-auto{
+                background: url('https://cdn.pixabay.com/photo/2016/10/22/17/06/gradient-1761190_1280.jpg')
+                        
+            }
+            .col-md-7.me-auto{
+                border-radius: 10px;
+                box-sizing: border-box;
+                border-color: black;
+                box-shadow: 3px 2px 1px 1px black;
+                         
+            }
+            a.list-group-item.list-group-item-action{
+                background: white;
+            }
+            .texte{
+                color: white;
+                box-sizing: border-box;
+                border-radius: 5px;
+                box-shadow: 1px 2px 1px 1px black;
+                box-sizing: border-box;
+                margin:30px;
+            }
+            .btn-circle {
+                width: 1.875rem;
+                height: 1.875rem;
+                text-align: center;
+                padding: 0.375rem 0;
+                font-size: 0.75rem;
+                line-height: 1.428571429;
+                border-radius: 0.938rem;
+                }
+        
+
+
 
 
 
@@ -40,20 +81,40 @@ html(lang="fr")
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
                         |Tailen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
-                        a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') About
-                        a.btn.btn-secondary(href='#' role='button' data-bs-toggle='button') Contact
-                        a.btn.btn-secondary(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
+                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') About
+                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Contact
+                        a.btn.btn-secondary.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
 
 
             .container-fluid
                 .row
                     .col-md-3.me-auto
-                        .w-25.sticky-top
-                            div(style="height: 50px;")
-                            .well
-                                p 
-                                | kcquzchzuh
-                                
+                        .w-40.sticky-top
+                                div(style="height: 60px;")
+                                .well
+                                    .w-40.sticky-top                    
+                                ul.fa-ul
+                                    li.texte
+                                        span.fa-li.fa.fa-check-square
+                                        | Vérifier
+                                    li.texte
+                                        span.fa-li.fa.fa-paperclip
+                                        | Conserver
+                                    li.texte
+                                        span.fa-li.fa.fa-eraser
+                                        | Effacer
+                                         
+                                        span.fa.fa-unlock
+                                        | pour sortir 
+                                        i.fa.fa-arrow-right
+
+                                    li.texte
+                                        span.fa-li.fa.fa-print
+                                        | Imprimer
+                             
+
+
+                                    
                     .col-md-7.me-auto
                         .well  
                             .row.no-gutters
@@ -80,15 +141,24 @@ html(lang="fr")
                                     if(posts[i].image_link)
                                         p(style="text-align:center;")
                                             img(src=posts[i].image_link width="100%")
+                                    hr
                                     div(style="width:80%; margin:auto;")
-                                        table(style="width:100%; text-align:center;")
-                                            tr
-                                                td
-                                                    form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                        input(type='submit' value=`${posts[i].ups} Ups`)
-                                                td
-                                                    form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
-                                                        input(type='submit' value=`${posts[i].downs} Downs`)
+                                        .row
+                                            .col-6
+                                                
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                    span.badge.bg-secondary=posts[i].ups
+                                                    i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
+                                                    button.btn.btn-light(type='submit')
+                                                        |Like
+                                                
+                                            .col-6
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                    button.btn.btn-light(type='submit')
+                                                        span.badge.bg-secondary=posts[i].downs
+                                                        i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
+                                                        | Dislike
+                                            hr    
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
                                         
                                         -for(var j = 0; j < posts[i].comments.length; j++)
@@ -102,7 +172,6 @@ html(lang="fr")
                                             a.list-group-item.list-group-item-action(aria-current='true')
                                                 form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
                                                     input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
-                                                    br
                                                     input(type="submit" value="Add the comment")
                     .col-md-2.me-auto
                         .w-25.sticky-top
