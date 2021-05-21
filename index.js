@@ -37,6 +37,7 @@ app.get('/', async (req, res)=>{
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                WHERE date(Posts.date) > date('now', '-1 day')
                 ORDER BY Posts.date DESC;
             `
         );
@@ -193,7 +194,7 @@ app.post('/add_post',(req, res)=>{
     db.serialize(()=>{
         if(req.body.tag_new){
             db.run(`
-            INSERT INTO Posts(author_id, content, image_link, tag, date)
+            INSERT INTO Posts(atureauthor_id, content, image_link, tag, date)
             VALUES
                 (?, ?, ?, ?, datetime('now'));
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
