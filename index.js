@@ -61,7 +61,6 @@ app.get('/', async (req, res)=>{
             const reacts = await db_select.all(`
                 SELECT Reacts.react, COUNT(*)
                 FROM Reacts
-                    JOIN Posts ON Reacts.post_id = Posts.id
                 WHERE Reacts.post_id = ?
                 GROUP BY Reacts.react;
             `,[rows[i].id]);
@@ -82,9 +81,19 @@ app.get('/', async (req, res)=>{
                     rows[i].downs = 0;
                     rows[i].ups = 0;
                 }
-                //rows[i].user_reaction = -1; // nothing
-                //rows[i].user_reaction = 0; // down
-                rows[i].user_reaction = 1; //up
+            }
+
+            // Getting user reaction
+            const user_reaction = await db_select.all(`
+                SELECT Reacts.react
+                FROM Reacts
+                WHERE Reacts.post_id = ? AND Reacts.reactor_id = ?;
+            `,[rows[i].id, req.session.user_id]);
+
+            if(user_reaction.length==0){
+                rows[i].user_reaction = -1;
+            }else{
+                rows[i].user_reaction = user_reaction.react;
             }
 
             // Getting comments
