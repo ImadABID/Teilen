@@ -52,45 +52,33 @@ function get_posts(show_reaction_related_to_me, trending_start, trending_end, ta
             });
         }
     });
-  }
+}
+
+function rest_main_post_filter(req_session){
+    req_session.show_reaction_related_to_me = 1;
+    req_session.trending_start = 'yesterday';
+    req_session.trending_end = 'now';
+    delete req_session.tag;
+}
 
 app.get('/', async (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
         let db_select = await openDb();
-        // Parametres
-        // req.query.tag
-        if(!req.session.show_reaction_related_to_me)
-            req.session.show_reaction_related_to_me = '1';
-        if(!req.session.trending_start){
-            sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
-            req.session.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.session.trending_start = req.session.trending_start[sql_date_selection_name];
-        }
-
-        if(!req.session.trending_start){
-            req.session.trending_start = 'yesterday';
-        }
+        // Filtring Parametres
         let trending_start = null;
         if(req.session.trending_start == 'yesterday'){
             sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
             trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
             trending_start = trending_start[sql_date_selection_name];
-        }else{
-            trending_start = req.session.trending_start;
         }
 
-        if(!req.session.trending_end){
-            req.session.trending_end = 'now'
-        }
         let trending_end = null;
         if(req.session.trending_end == 'now'){
             sql_date_selection_name = "datetime('now', 'localtime')"
             trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
             trending_end = trending_end[sql_date_selection_name];
-        }else{
-            trending_end = req.session.trending_end;
         }
 
         // Selecting posts
@@ -163,14 +151,38 @@ app.get('/', async (req, res)=>{
             user : user,
             posts : rows,
             post_tags : post_tags, // All available tags
-            show_reaction_related_to_me : req.query.show_reaction_related_to_me,
-            trending_start : req.query.trending_start,
-            trending_end : req.query.trending_end,
-            tag : req.query.tag
+            show_reaction_related_to_me : req.session.show_reaction_related_to_me,
+            trending_start_date : req.session.trending_start.slice(0,10),
+            trending_start_time : req.session.trending_start.slice(11,req.session.trending_start.length),
+            trending_end_date : req.session.trending_end.slice(0,10),
+            trending_end_time : req.session.trending_end.slice(11,req.session.trending_end.length),
+            tag : req.session.tag
         }
         res.render("main", data);
     }
 });
+
+app.post('/main_filtre_posts', async (req, res)=>{
+    let db_select = await openDb();
+
+    req.session.show_reaction_related_to_me = req.query.show_reaction_related_to_me;
+
+    req.session.trending_start = await openDb.get(`
+        SELECT date(?);
+    `, [req.query.trending_start_date+" "+trending_start_time])
+
+    req.session.trending_end = await openDb.get(`
+        SELECT date(?);
+    `, [req.query.trending_end_date+" "+trending_end_time])
+
+    res.redirect('/');
+})
+
+app.get('/main_filtre_posts_rest', (req, res)=>{
+    res.redirect('/');
+    rest_main_post_filter(req.session)
+
+})
 
 app.get('/show_post', async (req, res)=>{
     if(!req.session.pseudo){
@@ -202,7 +214,7 @@ app.get('/show_post', async (req, res)=>{
             user : user,
             post : pub
         }
-    
+
         res.render("show_post_no_style", data);
     }
 })
@@ -255,6 +267,7 @@ app.post('/authen', (req, res)=>{
             req.session.user_id = row.id
             req.session.pseudo = row.pseudo
             req.session.email = row.email
+            rest_main_post_filter(req.session)
             res.redirect('/');
         }
     });
