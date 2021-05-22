@@ -48,8 +48,6 @@ app.get('/', async (req, res)=>{
         }
 
         // Selecting posts
-        console.log(req.query.trending_end)
-        console.log(req.query.trending_start)
         const rows = await db_select.all(
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
@@ -219,13 +217,13 @@ app.post('/add_post',(req, res)=>{
             db.run(`
             INSERT INTO Posts(atureauthor_id, content, image_link, tag, date)
             VALUES
-                (?, ?, ?, ?, datetime('now'));
+                (?, ?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
         }else{
             db.run(`
             INSERT INTO Posts(author_id, content, image_link, tag, date)
             VALUES
-                (?, ?, ?, ?, datetime('now'));
+                (?, ?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_from_list);
         }
 
@@ -244,7 +242,7 @@ app.post('/add_comment',(req, res)=>{
         db.run(`
         INSERT INTO Comments(author_id, post_id, content, date)
         VALUES
-            (?, ?, ?, datetime('now'));
+            (?, ?, ?, datetime('now', 'localtime'));
         `, req.session.user_id, req.query.post_id, req.body.comment);
         
         db.get(`
@@ -269,7 +267,7 @@ app.post('/add_react',(req, res)=>{
             db.run(`
             INSERT INTO Reacts(reactor_id, post_id, react, date)
             VALUES
-                (?, ?, ?, datetime('now'));
+                (?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
                 res.redirect('/#post'+req.query.post_id);
             });
@@ -286,7 +284,7 @@ app.post('/add_react',(req, res)=>{
                 db.run(`
                 INSERT INTO Reacts(reactor_id, post_id, react, date)
                 VALUES
-                    (?, ?, ?, datetime('now'));
+                    (?, ?, ?, datetime('now', 'localtime'));
                 `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
                     res.redirect('/#post'+req.query.post_id);
                 });
