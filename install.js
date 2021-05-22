@@ -67,7 +67,7 @@ db.serialize(function() {
     db.run(`
         INSERT INTO Posts(author_id, content, image_link, tag, date)
         VALUES
-            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "dev", datetime('now', 'localtime', '-2 days')),
+            (1,   "Welcome to Teilen", "https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/tiger-2535888-1920_ver_1.jpg", "nature", datetime('now', 'localtime', '-2 days')),
             (2,   "PSG vs FCB !", "https://images.bfmtv.com/hWqWgLneICAMGTvbfMPHL2-HXJo=/0x0:1280x720/images/Resume-Barcelone-1-4-Paris-SG-Ligue-des-champions-8e-de-finale-aller-970499.jpg", "dev", datetime('now', 'localtime', '-2 days', '+1 minute')),
             (3,   "I'm in love with this website", "https://www.zdnet.com/a/hub/i/2020/07/13/7c4051fb-df54-4d6e-8bb6-35b9b48ee872/linustorvaldstedyoutubed.jpg", "dev", datetime('now', 'localtime', '-1 days', '+21 minutes', '-5 hours')),
             (4,   "Juventus confirm Ronaldo is in Madeira but not a return date", "https://ronaldo.com/wp-content/uploads/2020/02/GettyImages-1203559908.jpg", "sport", datetime('now', 'localtime', '-1 days', '-43 minutes', '+3 hours')),
