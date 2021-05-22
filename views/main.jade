@@ -83,9 +83,10 @@ html(lang="fr")
                 background: rgb(231, 159, 60);
             }
 
-            .bouton:hover
-            { color: #D87F21; }
-                    .btn1{
+            .bouton:hover{ 
+                color: #D87F21;
+            }
+            .btn1{
                 border: none;
                 outline: none;
                 height: 50px;
@@ -118,6 +119,16 @@ html(lang="fr")
                 border-radius:5px;
                 margin:2px;
             }
+            .btn.btn-primary{
+                box-sizing: border-box;
+                border-radius: 5px;
+                border-color: black;
+                background: rgb(232, 216, 204) ;
+                margin:3px;
+                padding: 4px;
+                box-shadow: 1px 1px 1px 1px #B06300;
+                color:black;
+            }
 
 
 
@@ -140,7 +151,7 @@ html(lang="fr")
                         .w-40.sticky-top
                                 div(style="height: 60px;")
                                 .well
-                                    form(action="")
+                                    form(action="/main_filter_post")
                                             h4 Filter Posts
                                             .groupe2
                                                 label(style="font-weight: bold;") Choose trending interval :
@@ -158,6 +169,13 @@ html(lang="fr")
                                                         input#start(type='date' name='trending_end_date' value=`${trending_end_date}`)
                                                     .col-5
                                                         input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
+                                                br
+                                                .d-grid.gap-3.d-md-block
+                                                    input.btn.btn-primary(type='submit' value="Validate")
+                                                    button.btn.btn-primary(type='button') Rest
+                                                   
+
+
 
                                                        
 
