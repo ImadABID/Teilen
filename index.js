@@ -28,33 +28,62 @@ app.use(session(
     }
 ))
 
+function get_posts(show_reaction_related_to_me, trending_start, trending_end, tag) {
+    return new Promise((resolve) => {
+        if(tag){
+            db.all(
+                `
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                    WHERE (datetime(Posts.date) BETWEEN ? AND ?) AND Posts.tag = ?
+                    ORDER BY Posts.date DESC;
+                `, [trending_start, trending_end, tag], (err, rows)=>{
+                    resolve(rows);
+            });
+        }else{
+            db.all(
+                `
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                    WHERE datetime(Posts.date) BETWEEN ? AND ?
+                    ORDER BY Posts.date DESC;
+                `, [trending_start, trending_end], (err, rows)=>{
+                    resolve(rows);
+            });
+        }
+    });
+}
+
+function rest_main_post_filter(req_session){
+    req_session.show_reaction_related_to_me = 1;
+    req_session.trending_start = 'yesterday';
+    req_session.trending_end = 'now';
+    delete req_session.tag;
+}
+
 app.get('/', async (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
         let db_select = await openDb();
-        // Parametres
-        if(!req.query.show_reaction_related_to_me)
-            req.query.show_reaction_related_to_me = true;
-        if(!req.query.trending_start){
+        // Filtring Parametres
+        let trending_start = null;
+        if(req.session.trending_start == 'yesterday'){
             sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
-            req.query.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.query.trending_start = req.query.trending_start[sql_date_selection_name];
+            trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
+            trending_start = trending_start[sql_date_selection_name];
         }
-        if(!req.query.trending_end){
+
+        let trending_end = null;
+        if(req.session.trending_end == 'now'){
             sql_date_selection_name = "datetime('now', 'localtime')"
-            req.query.trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.query.trending_end = req.query.trending_end[sql_date_selection_name];
+            trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
+            trending_end = trending_end[sql_date_selection_name];
         }
 
         // Selecting posts
-        const rows = await db_select.all(
-            `
-                SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
-                FROM Posts JOIN Users ON Posts.author_id =  Users.id
-                WHERE datetime(Posts.date) BETWEEN ? AND ?
-                ORDER BY Posts.date DESC;
-            `, [req.query.trending_start, req.query.trending_end]);
+        const rows = await get_posts(req.session.show_reaction_related_to_me, trending_start, trending_end, req.session.tag);
+        
 
         for(let i = 0; i < rows.length; i++){
             // Getting reacts
@@ -121,11 +150,39 @@ app.get('/', async (req, res)=>{
         let data = {
             user : user,
             posts : rows,
-            post_tags : post_tags
+            post_tags : post_tags, // All available tags
+            show_reaction_related_to_me : req.session.show_reaction_related_to_me,
+            trending_start_date : trending_start.slice(0,10),
+            trending_start_time : trending_start.slice(11,req.session.trending_start.length),
+            trending_end_date : trending_end.slice(0,10),
+            trending_end_time : trending_end.slice(11,req.session.trending_end.length),
+            tag : req.session.tag
         }
         res.render("main", data);
     }
 });
+
+app.post('/main_filtre_posts', async (req, res)=>{
+    let db_select = await openDb();
+
+    req.session.show_reaction_related_to_me = req.query.show_reaction_related_to_me;
+
+    req.session.trending_start = await openDb.get(`
+        SELECT date(?);
+    `, [req.query.trending_start_date+" "+trending_start_time])
+
+    req.session.trending_end = await openDb.get(`
+        SELECT date(?);
+    `, [req.query.trending_end_date+" "+trending_end_time])
+
+    res.redirect('/');
+})
+
+app.get('/main_filtre_posts_rest', (req, res)=>{
+    res.redirect('/');
+    rest_main_post_filter(req.session)
+
+})
 
 app.get('/show_post', async (req, res)=>{
     if(!req.session.pseudo){
@@ -157,7 +214,7 @@ app.get('/show_post', async (req, res)=>{
             user : user,
             post : pub
         }
-    
+
         res.render("show_post_no_style", data);
     }
 })
@@ -210,6 +267,7 @@ app.post('/authen', (req, res)=>{
             req.session.user_id = row.id
             req.session.pseudo = row.pseudo
             req.session.email = row.email
+            rest_main_post_filter(req.session)
             res.redirect('/');
         }
     });
