@@ -33,16 +33,16 @@ html(lang="fr")
                 border-radius :15px;
                 margin: 4px;
                 background-color: gray;
+            }
+            .groupe{
+                box-sizing: border-box;
+                border-radius: 6px;
+                border-color: black;
+                background: rgb(232, 216, 204) ;
+                margin:10px;
+                padding: 20px;
 
             }
-            /*.col-md-3.me-auto{
-       
-                background: url('https://cdn.pixabay.com/photo/2016/10/22/17/06/gradient-1761190_1280.jpg')          
-            }
-            .col-md-2.me-auto{
-                background: url('https://cdn.pixabay.com/photo/2016/10/22/17/06/gradient-1761190_1280.jpg')
-                        
-            }*/
             .col-md-7.me-auto{
                 border-radius: 10px;
  
@@ -78,6 +78,21 @@ html(lang="fr")
 
                 .bouton:hover
                 { color: #D87F21; }
+                      .btn1{
+                    border: none;
+                    outline: none;
+                    height: 50px;
+                    width: 100%;
+                    background-color: rgb(232, 216, 204);
+                    color: black;
+                    border-radius: 4px;
+                    font-weight: bold;
+                }
+                .btn1:hover{
+                    background: black;
+                    border: 1px solid;
+                    color: white;
+                }
         
 
 
@@ -130,19 +145,28 @@ html(lang="fr")
                         .well  
                             .row.no-gutters
                                 h3 Add a post
-                                form(action="/add_post" method="POST")
-                                    input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
-                                    br
-                                    input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")
-                                    br
-                                    span Select your post tag 
-                                    select(name="tag_from_list" required)
-                                        - for(let i = 0; i < post_tags.length; i++)
-                                            option(value=post_tags[i].tag)=post_tags[i].tag
-                                        option(value='other') Not in the list
-                                    input(name="tag_new" type="text" placeholder="Not in the list ? Write it here." style="margin:5px;")
-                                    br
-                                    input(type="submit" value="Add it !")
+                                hr
+                                .groupe
+                                    form(action="/add_post" method="POST")
+                                        span Write your post :
+                                        input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px",required)
+                                        br
+                                        i.fa.fa-link.fa-fw(aria-hidden='true')
+                                        span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
+                                        input.form-control(type='url' name="image_link" placeholder="image link https://example.com/image.jpg"  pattern="https://.*" aria-label='With textarea' style="margin:5px border-radius:2px;",required)
+                                        br
+                                        span Select your post tag :
+                                        br
+                                        .row
+                                        select.form-select-sm(name="tag_form_list" aria-label='Default select example',required)
+                                            - for(let i = 0; i < post_tags.length; i++)
+                                                option(value=post_tags[i].tag)=post_tags[i].tag
+                                            option(value='other') Not in the list
+                                        span(style="font-style: oblique 40deg; margin:5px;") Not in the list ?
+                                        input.form-control-sm(type='text' name="tag_new" placeholder="Write it here"  style="margin:5px border-radius:2px;",required)
+                                hr
+                                input(type="submit" class="btn1 mt-3 mb-5" value="Add it")                                                    
+
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
                                     .row
@@ -202,7 +226,7 @@ html(lang="fr")
                                         form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
                                             .row
                                                 .col-10
-                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here." aria-label='default input example' style="margin:5px",required)
+                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:5px",required)
                                                 .col-2
                                                     input.form-control(type='submit' value="Add" aria-label='default input example' style="margin:5px")                                                    
 
