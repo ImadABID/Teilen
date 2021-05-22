@@ -33,14 +33,31 @@ app.get('/', async (req, res)=>{
         res.redirect('/authen')
     }else{
         let db_select = await openDb();
+        // Parametres
+        if(!req.query.show_reaction_related_to_me)
+            req.query.show_reaction_related_to_me = true;
+        if(!req.query.trending_start){
+            sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
+            req.query.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
+            req.query.trending_start = req.query.trending_start[sql_date_selection_name];
+        }
+        if(!req.query.trending_end){
+            sql_date_selection_name = "datetime('now', 'localtime')"
+            req.query.trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
+            req.query.trending_end = req.query.trending_end[sql_date_selection_name];
+        }
+
+        // Selecting posts
+        console.log(req.query.trending_end)
+        console.log(req.query.trending_start)
         const rows = await db_select.all(
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id
-                WHERE date(Posts.date) > date('now', '-1 day')
+                WHERE datetime(Posts.date) BETWEEN ? AND ?
                 ORDER BY Posts.date DESC;
-            `
-        );
+            `, [req.query.trending_start, req.query.trending_end]);
+
         for(let i = 0; i < rows.length; i++){
             // Getting reacts
             const reacts = await db_select.all(`
@@ -67,6 +84,9 @@ app.get('/', async (req, res)=>{
                     rows[i].downs = 0;
                     rows[i].ups = 0;
                 }
+                //rows[i].user_reaction = -1; // nothing
+                //rows[i].user_reaction = 0; // down
+                rows[i].user_reaction = 1; //up
             }
 
             // Getting comments
@@ -80,11 +100,14 @@ app.get('/', async (req, res)=>{
             `, [rows[i].id]);
             rows[i].comments = comments_rows;
         }
+
+        // Getting comments tags
         const post_tags = await db_select.all(`
             SELECT tag
             FROM Posts
             GROUP BY tag;
         `)
+
         let user = {
             pseudo : req.session.pseudo,
         }
