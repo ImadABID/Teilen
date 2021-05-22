@@ -50,7 +50,7 @@ html(lang="fr")
                 background: white;
             }
             .texte{
-                color: white;
+                color: black;
                 box-sizing: border-box;
                 border-radius: 5px;
                 box-shadow: 1px 2px 1px 1px black;
@@ -66,6 +66,16 @@ html(lang="fr")
                 line-height: 1.428571429;
                 border-radius: 0.938rem;
                 }
+                h6{
+                    font-weight: bold;
+                }
+                .badge{
+                    color:rgb(24, 23, 23);
+                    background: rgb(231, 159, 60);
+                }
+
+                .bouton:hover
+                { color: red; }
         
 
 
@@ -133,10 +143,14 @@ html(lang="fr")
                                     input(type="submit" value="Add it !")
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
-                                    p(style="text-align : right;")=posts[i].tag
-                                    h5=posts[i].pseudo
+                                    .row
+                                        .col-11
+                                        .col-1
+                                            span.badge.rounded-pill.text=posts[i].tag
+                                    .row       
+                                    h5(style="font-weight: bold;")=posts[i].pseudo
                                     small=posts[i].date
-                                    h4=posts[i].content
+                                    h6=posts[i].content
                                     if(posts[i].image_link)
                                         p(style="text-align:center;")
                                             img(src=posts[i].image_link width="100%")
@@ -146,15 +160,15 @@ html(lang="fr")
                                             .col-6
                                                 
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                    span.badge.bg-secondary=posts[i].ups
-                                                    i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
-                                                    button.btn.btn-light(type='submit')
+                                                    button.btn.bouton(type='submit')
+                                                        span.badge.bg-light=posts[i].ups
+                                                        i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
                                                         |Like
                                                 
                                             .col-6
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
-                                                    button.btn.btn-light(type='submit')
-                                                        span.badge.bg-secondary=posts[i].downs
+                                                    button.btn.bouton(type='submit')
+                                                        span.badge.bg-light=posts[i].downs
                                                         i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
                                                         | Dislike
                                             hr    
