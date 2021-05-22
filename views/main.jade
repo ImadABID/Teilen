@@ -75,7 +75,7 @@ html(lang="fr")
                 }
 
                 .bouton:hover
-                { color: red; }
+                { color: #D87F21; }
         
 
 
@@ -160,32 +160,51 @@ html(lang="fr")
                                             .col-6
                                                 
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                    
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].ups
-                                                        i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
-                                                        |Like
+                                                        if(posts[i].user_reaction==-1)
+                                                            i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
+                                                            span Like
+                                                        if(posts[i].user_reaction==0)
+                                                            i.fa.fa-thumbs-o-up.fa-fw( aria-hidden='true')
+                                                            span Like
+                                                        if(posts[i].user_reaction==1)
+                                                            i.fa.fa-thumbs-o-up.fa-fw(style="color:red;" aria-hidden='true')
+                                                            span(style="color:#87CEEB;") Like
+                                                    
                                                 
                                             .col-6
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].downs
-                                                        i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
-                                                        | Dislike
+                                                        if(posts[i].user_reaction==-1)
+                                                            i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
+                                                            span Dislike
+                                                        if(posts[i].user_reaction==0)
+                                                            i.fa.fa-thumbs-o-down.fa-fw(style="color:#D87F21;" aria-hidden='true')
+                                                            span(style="color:#D87F21;") Dislike
+                                                        if(posts[i].user_reaction==1)
+                                                            i.fa.fa-thumbs-o-down.fa-fw( aria-hidden='true')
+                                                            span Dislike
                                             hr    
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
                                         
                                         -for(var j = 0; j < posts[i].comments.length; j++)
                                             .list-group
                                                 a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}`)
-                                                    .d-flex.w-100.justify-content-between
-                                                        h6=posts[i].comments[j].pseudo 
+                                                    .d-flex.w-100.justify-content-between(style="border-radius:4px;")
+                                                        h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
                                                         small=posts[i].comments[j].date
                                                     p.mb-1=posts[i].comments[j].content
-                                        .list-group
-                                            a.list-group-item.list-group-item-action(aria-current='true')
-                                                form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
-                                                    input(name="comment" type="text" placeholder="Write your comment here." required style="margin:5px;")
-                                                    input(type="submit" value="Add the comment")
+
+                                        form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                            .row
+                                                .col-10
+                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here." aria-label='default input example' style="margin:5px")
+                                                .col-2
+                                                    input.form-control(type='submit' value="Add" aria-label='default input example' style="margin:5px")                                                    
+
                     .col-md-2.me-auto
                         .w-25.sticky-top
                             div(style="height: 60px;")
