@@ -282,7 +282,12 @@ app.post('/add_react',(req, res)=>{
             });
         }else{
             if(rows[0].react == req.query.react){
-                res.redirect('/#post'+req.query.post_id);
+                db.run(`
+                DELETE FROM Reacts
+                WHERE id = ?;
+                `,rows[0].id, () => {
+                    res.redirect('/#post'+req.query.post_id);
+                });
             }else{
 
                 db.run(`
