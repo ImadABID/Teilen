@@ -72,6 +72,8 @@ app.get('/', async (req, res)=>{
             sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
             trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
             trending_start = trending_start[sql_date_selection_name];
+        }else{
+            trending_start = req.session.trending_start;
         }
 
         let trending_end = null;
@@ -79,6 +81,8 @@ app.get('/', async (req, res)=>{
             sql_date_selection_name = "datetime('now', 'localtime')"
             trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
             trending_end = trending_end[sql_date_selection_name];
+        }else{
+            trending_end = req.session.trending_end;
         }
 
         // Selecting posts
@@ -162,26 +166,21 @@ app.get('/', async (req, res)=>{
     }
 });
 
-app.post('/main_filtre_posts', async (req, res)=>{
-    let db_select = await openDb();
+app.get('/main_filter_posts', (req, res)=>{
 
     req.session.show_reaction_related_to_me = req.query.show_reaction_related_to_me;
 
-    req.session.trending_start = await openDb.get(`
-        SELECT date(?);
-    `, [req.query.trending_start_date+" "+trending_start_time])
+    req.session.trending_start = req.query.trending_start_date+" "+req.query.trending_start_time;
+    req.session.trending_end = req.query.trending_end_date+" "+req.query.trending_end_time;
 
-    req.session.trending_end = await openDb.get(`
-        SELECT date(?);
-    `, [req.query.trending_end_date+" "+trending_end_time])
+    req.session.tag = req.query.tag;
 
     res.redirect('/');
 })
 
-app.get('/main_filtre_posts_rest', (req, res)=>{
-    res.redirect('/');
+app.get('/main_filter_posts_rest', (req, res)=>{
     rest_main_post_filter(req.session)
-
+    res.redirect('/');
 })
 
 app.get('/show_post', async (req, res)=>{
