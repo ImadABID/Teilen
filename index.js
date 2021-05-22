@@ -152,10 +152,10 @@ app.get('/', async (req, res)=>{
             posts : rows,
             post_tags : post_tags, // All available tags
             show_reaction_related_to_me : req.session.show_reaction_related_to_me,
-            trending_start_date : req.session.trending_start.slice(0,10),
-            trending_start_time : req.session.trending_start.slice(11,req.session.trending_start.length),
-            trending_end_date : req.session.trending_end.slice(0,10),
-            trending_end_time : req.session.trending_end.slice(11,req.session.trending_end.length),
+            trending_start_date : trending_start.slice(0,10),
+            trending_start_time : trending_start.slice(11,req.session.trending_start.length),
+            trending_end_date : trending_end.slice(0,10),
+            trending_end_time : trending_end.slice(11,req.session.trending_end.length),
             tag : req.session.tag
         }
         res.render("main", data);
