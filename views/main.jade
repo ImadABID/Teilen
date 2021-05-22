@@ -68,9 +68,7 @@ html(lang="fr")
                 line-height: 1.428571429;
                 border-radius: 0.938rem;
                 }
-                h6{
-                    font-weight: bold;
-                }
+        
                 .badge{
                     color:rgb(24, 23, 23);
                     background: rgb(231, 159, 60);
@@ -146,26 +144,27 @@ html(lang="fr")
                             .row.no-gutters
                                 h3 Add a post
                                 hr
-                                .groupe
-                                    form(action="/add_post" method="POST")
-                                        span Write your post :
-                                        input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px",required)
-                                        br
-                                        i.fa.fa-link.fa-fw(aria-hidden='true')
-                                        span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
-                                        input.form-control(type='url' name="image_link" placeholder="image link https://example.com/image.jpg"  pattern="https://.*" aria-label='With textarea' style="margin:5px border-radius:2px;",required)
-                                        br
-                                        span Select your post tag :
-                                        br
-                                        .row
-                                        select.form-select-sm(name="tag_form_list" aria-label='Default select example',required)
-                                            - for(let i = 0; i < post_tags.length; i++)
-                                                option(value=post_tags[i].tag)=post_tags[i].tag
-                                            option(value='other') Not in the list
-                                        span(style="font-style: oblique 40deg; margin:5px;") Not in the list ?
-                                        input.form-control-sm(type='text' name="tag_new" placeholder="Write it here"  style="margin:5px border-radius:2px;",required)
-                                hr
-                                input(type="submit" class="btn1 mt-3 mb-5" value="Add it")                                                    
+                                
+                                form(action="/add_post" method="POST")
+                                        .groupe
+                                            span Write your post :
+                                            input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px",required)
+                                            br
+                                            i.fa.fa-link.fa-fw(aria-hidden='true')
+                                            span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
+                                            input.form-control(type='url' name="image_link" placeholder="image link https://example.com/image.jpg"  pattern="https://.*" aria-label='With textarea' style="margin:5px border-radius:2px;")
+                                            br
+                                            span Select your post tag :
+                                            br
+                                            .row
+                                            select.form-select-sm(name="tag_form_list" aria-label='Default select example',required)
+                                                - for(let i = 0; i < post_tags.length; i++)
+                                                    option(value=post_tags[i].tag)=post_tags[i].tag
+                                                option(value='other') Not in the list
+                                            span(style="font-style: oblique 40deg; margin:5px;") Not in the list ?
+                                            input.form-control-sm(type='text' name="tag_new" placeholder="Write it here"  style="margin:5px border-radius:2px;")
+                                        hr
+                                        input(type="submit" class="btn1 mt-3 mb-5" value="Add it")                                                    
 
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
@@ -219,23 +218,22 @@ html(lang="fr")
                                             .list-group
                                                 a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
                                                     .d-flex.w-100.justify-content-between
-                                                        h6(style="font-weight: strong;")=`${posts[i].comments[j].pseudo} : `
+                                                        h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
                                                         small=posts[i].comments[j].date
                                                     p.mb-1=posts[i].comments[j].content
 
                                         form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
                                             .row
                                                 .col-10
-                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:5px",required)
+                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:8px",required)
                                                 .col-2
-                                                    input.form-control(type='submit' value="Add" aria-label='default input example' style="margin:5px")                                                    
+                                                    input.form-control(type='submit' value="Add" aria-label='default input example' style="margin:8px")                                                    
 
                     .col-md-2.me-auto
                         .w-25.sticky-top
                             div(style="height: 60px;")
                             .well 
                                 p
-                                    |rfnajznfjanfaj
                                 
 
 
