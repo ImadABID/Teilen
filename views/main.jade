@@ -160,16 +160,15 @@ html(lang="fr")
                                             .col-6
                                                 
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                    
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].ups
-                                                        if(posts[i].user_reaction==-1)
+                                                        -if(posts[i].user_reaction==-1)
                                                             i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
                                                             span Like
-                                                        if(posts[i].user_reaction==0)
+                                                        -if(posts[i].user_reaction==0)
                                                             i.fa.fa-thumbs-o-up.fa-fw( aria-hidden='true')
                                                             span Like
-                                                        if(posts[i].user_reaction==1)
+                                                        -if(posts[i].user_reaction==1)
                                                             i.fa.fa-thumbs-o-up.fa-fw(style="color:red;" aria-hidden='true')
                                                             span(style="color:#87CEEB;") Like
                                                     
@@ -178,13 +177,13 @@ html(lang="fr")
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].downs
-                                                        if(posts[i].user_reaction==-1)
+                                                        -if(posts[i].user_reaction==-1)
                                                             i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
                                                             span Dislike
-                                                        if(posts[i].user_reaction==0)
+                                                        -if(posts[i].user_reaction==0)
                                                             i.fa.fa-thumbs-o-down.fa-fw(style="color:#D87F21;" aria-hidden='true')
                                                             span(style="color:#D87F21;") Dislike
-                                                        if(posts[i].user_reaction==1)
+                                                        -if(posts[i].user_reaction==1)
                                                             i.fa.fa-thumbs-o-down.fa-fw( aria-hidden='true')
                                                             span Dislike
                                             hr    

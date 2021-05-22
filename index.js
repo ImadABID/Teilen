@@ -93,7 +93,7 @@ app.get('/', async (req, res)=>{
             if(user_reaction.length==0){
                 rows[i].user_reaction = -1;
             }else{
-                rows[i].user_reaction = user_reaction.react;
+                rows[i].user_reaction = user_reaction[0].react;
             }
 
             // Getting comments
