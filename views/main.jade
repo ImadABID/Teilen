@@ -180,11 +180,11 @@ html(lang="fr")
                                                         input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
                                                 br
                                                 span(style="margin:5px;") select tag :
-                                                select.form-select-sm(name="show_reaction_related_to_me" aria-label='Default select example',required)
+                                                select.form-select-sm(name="tag" aria-label='Default select example',required)
                                                     - for(let i = 0; i < post_tags.length; i++)
                                                         option(value=post_tags[i].tag)=post_tags[i].tag
                                                 .form-check
-                                                    input#flexCheckIndeterminate.form-check-input(type='checkbox' value='')
+                                                    input#flexCheckIndeterminate.form-check-input(type='checkbox' name='show_reaction_related_to_me')
                                                     label.form-check-label(for='flexCheckIndeterminate')
                                                         | show reactions related to me
                                                 .d-grid.gap-3.d-md-flex.justify-content-md-end
