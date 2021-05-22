@@ -162,7 +162,6 @@ html(lang="fr")
                                             .col-6
                                                 
                                                 form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
-                                                    
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].ups
                                                         -if(posts[i].user_reaction==-1)
