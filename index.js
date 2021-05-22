@@ -68,14 +68,33 @@ app.get('/', async (req, res)=>{
             req.session.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
             req.session.trending_start = req.session.trending_start[sql_date_selection_name];
         }
+
+        if(!req.session.trending_start){
+            req.session.trending_start = 'yesterday';
+        }
+        let trending_start = null;
+        if(req.session.trending_start == 'yesterday'){
+            sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
+            trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
+            trending_start = trending_start[sql_date_selection_name];
+        }else{
+            trending_start = req.session.trending_start;
+        }
+
         if(!req.session.trending_end){
+            req.session.trending_end = 'now'
+        }
+        let trending_end = null;
+        if(req.session.trending_end == 'now'){
             sql_date_selection_name = "datetime('now', 'localtime')"
-            req.session.trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.session.trending_end = req.session.trending_end[sql_date_selection_name];
+            trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
+            trending_end = trending_end[sql_date_selection_name];
+        }else{
+            trending_end = req.session.trending_end;
         }
 
         // Selecting posts
-        const rows = await get_posts(req.session.show_reaction_related_to_me, req.session.trending_start, req.session.trending_end, req.session.tag);
+        const rows = await get_posts(req.session.show_reaction_related_to_me, trending_start, trending_end, req.session.tag);
         
 
         for(let i = 0; i < rows.length; i++){
