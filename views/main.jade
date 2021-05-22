@@ -41,7 +41,16 @@ html(lang="fr")
                 background: rgb(232, 216, 204) ;
                 margin:10px;
                 padding: 20px;
-
+                box-shadow: 1px 1px 1px 1px #B06300;
+            }
+            .groupe2{
+                box-sizing: border-box;
+                border-radius: 6px;
+                border-color: black;
+                background: rgb(232, 216, 204) ;
+                margin:10px;
+                padding: 20px;
+                box-shadow: 1px 1px 1px 1px #B06300;
             }
             .col-md-7.me-auto{
                 border-radius: 10px;
@@ -69,31 +78,46 @@ html(lang="fr")
                 border-radius: 0.938rem;
                 }
         
-                .badge{
-                    color:rgb(24, 23, 23);
-                    background: rgb(231, 159, 60);
-                }
+            .badge{
+                color:rgb(24, 23, 23);
+                background: rgb(231, 159, 60);
+            }
 
-                .bouton:hover
-                { color: #D87F21; }
-                      .btn1{
-                    border: none;
-                    outline: none;
-                    height: 50px;
-                    width: 100%;
-                    background-color: rgb(232, 216, 204);
-                    color: black;
-                    border-radius: 4px;
-                    font-weight: bold;
-                }
-                .btn1:hover{
-                    background: black;
-                    border: 1px solid;
-                    color: white;
-                }
-        
+            .bouton:hover
+            { color: #D87F21; }
+                    .btn1{
+                border: none;
+                outline: none;
+                height: 50px;
+                width: 100%;
+                background-color: rgb(232, 216, 204);
+                color: black;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+            .btn1:hover{
+                background: black;
+                border: 1px solid;
+                color: white;
+            }
+            label {
+                display: block;
+                font: 1rem 'Fira Sans', sans-serif;
+            }
 
-
+            input,
+            label {
+                margin: .4rem 0;
+            }
+            #start{
+                border-radius:5px;
+                margin:2px;
+    
+            }
+            #appt{
+                border-radius:5px;
+                margin:2px;
+            }
 
 
 
@@ -105,7 +129,7 @@ html(lang="fr")
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
                         |Tailen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
-                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') About
+                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Profil
                         a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Contact
                         a.btn.btn-secondary.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
 
@@ -116,25 +140,27 @@ html(lang="fr")
                         .w-40.sticky-top
                                 div(style="height: 60px;")
                                 .well
-                                    .w-40.sticky-top                    
-                                ul.fa-ul
-                                    li.texte
-                                        span.fa-li.fa.fa-check-square
-                                        | Vérifier
-                                    li.texte
-                                        span.fa-li.fa.fa-paperclip
-                                        | Conserver
-                                    li.texte
-                                        span.fa-li.fa.fa-eraser
-                                        | Effacer
-                                         
-                                        span.fa.fa-unlock
-                                        | pour sortir 
-                                        i.fa.fa-arrow-right
+                                    form(action="")
+                                            h4 Filter Posts
+                                            .groupe2
+                                                label(style="font-weight: bold;") Choose trending interval :
+                                                span from :
+                                                br
+                                                .row
+                                                    .col-7
+                                                        input#start(type='date' name='trending_start_date' value=`${trending_start_date}`)
+                                                    .col-5
+                                                        input#appt(type='time' name='trending_start_time' value=`${trending_start_time}` required='')
+                                                span to :
+                                                br
+                                                .row
+                                                    .col-7
+                                                        input#start(type='date' name='trending_end_date' value=`${trending_end_date}`)
+                                                    .col-5
+                                                        input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
 
-                                    li.texte
-                                        span.fa-li.fa.fa-print
-                                        | Imprimer
+                                                       
+
                              
 
 
@@ -148,7 +174,7 @@ html(lang="fr")
                                 form(action="/add_post" method="POST")
                                         .groupe
                                             span Write your post :
-                                            input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px",required)
+                                            input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
                                             br
                                             i.fa.fa-link.fa-fw(aria-hidden='true')
                                             span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
@@ -157,7 +183,7 @@ html(lang="fr")
                                             span Select your post tag :
                                             br
                                             .row
-                                            select.form-select-sm(name="tag_form_list" aria-label='Default select example',required)
+                                            select.form-select-sm(name="tag_from_list" aria-label='Default select example',required)
                                                 - for(let i = 0; i < post_tags.length; i++)
                                                     option(value=post_tags[i].tag)=post_tags[i].tag
                                                 option(value='other') Not in the list
@@ -225,7 +251,7 @@ html(lang="fr")
                                         form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
                                             .row
                                                 .col-10
-                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:8px",required)
+                                                    input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:8px",required='')
                                                 .col-2
                                                     input.form-control(type='submit' value="Add" aria-label='default input example' style="margin:8px")                                                    
 
