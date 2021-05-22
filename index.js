@@ -48,8 +48,6 @@ app.get('/', async (req, res)=>{
         }
 
         // Selecting posts
-        console.log(req.query.trending_end)
-        console.log(req.query.trending_start)
         const rows = await db_select.all(
             `
                 SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
@@ -63,7 +61,6 @@ app.get('/', async (req, res)=>{
             const reacts = await db_select.all(`
                 SELECT Reacts.react, COUNT(*)
                 FROM Reacts
-                    JOIN Posts ON Reacts.post_id = Posts.id
                 WHERE Reacts.post_id = ?
                 GROUP BY Reacts.react;
             `,[rows[i].id]);
@@ -84,9 +81,19 @@ app.get('/', async (req, res)=>{
                     rows[i].downs = 0;
                     rows[i].ups = 0;
                 }
-                //rows[i].user_reaction = -1; // nothing
-                //rows[i].user_reaction = 0; // down
-                rows[i].user_reaction = 1; //up
+            }
+
+            // Getting user reaction
+            const user_reaction = await db_select.all(`
+                SELECT Reacts.react
+                FROM Reacts
+                WHERE Reacts.post_id = ? AND Reacts.reactor_id = ?;
+            `,[rows[i].id, req.session.user_id]);
+
+            if(user_reaction.length==0){
+                rows[i].user_reaction = -1;
+            }else{
+                rows[i].user_reaction = user_reaction.react;
             }
 
             // Getting comments
@@ -219,13 +226,13 @@ app.post('/add_post',(req, res)=>{
             db.run(`
             INSERT INTO Posts(atureauthor_id, content, image_link, tag, date)
             VALUES
-                (?, ?, ?, ?, datetime('now'));
+                (?, ?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
         }else{
             db.run(`
             INSERT INTO Posts(author_id, content, image_link, tag, date)
             VALUES
-                (?, ?, ?, ?, datetime('now'));
+                (?, ?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_from_list);
         }
 
@@ -244,7 +251,7 @@ app.post('/add_comment',(req, res)=>{
         db.run(`
         INSERT INTO Comments(author_id, post_id, content, date)
         VALUES
-            (?, ?, ?, datetime('now'));
+            (?, ?, ?, datetime('now', 'localtime'));
         `, req.session.user_id, req.query.post_id, req.body.comment);
         
         db.get(`
@@ -269,7 +276,7 @@ app.post('/add_react',(req, res)=>{
             db.run(`
             INSERT INTO Reacts(reactor_id, post_id, react, date)
             VALUES
-                (?, ?, ?, datetime('now'));
+                (?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
                 res.redirect('/#post'+req.query.post_id);
             });
@@ -286,7 +293,7 @@ app.post('/add_react',(req, res)=>{
                 db.run(`
                 INSERT INTO Reacts(reactor_id, post_id, react, date)
                 VALUES
-                    (?, ?, ?, datetime('now'));
+                    (?, ?, ?, datetime('now', 'localtime'));
                 `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
                     res.redirect('/#post'+req.query.post_id);
                 });
