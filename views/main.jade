@@ -121,7 +121,7 @@ html(lang="fr")
             }
             .btn.btn-primary{
                 box-sizing: border-box;
-                border-radius: 5px;
+                border-radius: 8px;
                 border-color: black;
                 background: rgb(232, 216, 204) ;
                 margin:3px;
@@ -133,6 +133,9 @@ html(lang="fr")
                 background: black;
                 border: 1px solid;
                 color: white;
+            }
+            .form-select-sm{
+                border-radius: 9px;
             }
 
 
@@ -176,6 +179,10 @@ html(lang="fr")
                                                     .col-5
                                                         input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
                                                 br
+                                                span(style="margin:5px;") select tag :
+                                                select.form-select-sm(name="show_reaction_related_to_me" aria-label='Default select example',required)
+                                                    - for(let i = 0; i < post_tags.length; i++)
+                                                        option(value=post_tags[i].tag)=post_tags[i].tag
                                                 .form-check
                                                     input#flexCheckIndeterminate.form-check-input(type='checkbox' value='')
                                                     label.form-check-label(for='flexCheckIndeterminate')
