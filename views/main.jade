@@ -126,8 +126,13 @@ html(lang="fr")
                 background: rgb(232, 216, 204) ;
                 margin:3px;
                 padding: 4px;
-                box-shadow: 1px 1px 1px 1px #B06300;
+                box-shadow: 1px 1px 1px 1px #D37600;
                 color:black;
+            }
+            .btn.btn-primary:hover{
+                background: black;
+                border: 1px solid;
+                color: white;
             }
 
 
@@ -155,6 +160,7 @@ html(lang="fr")
                                             h4 Filter Posts
                                             .groupe2
                                                 label(style="font-weight: bold;") Choose trending interval :
+                                                br
                                                 span from :
                                                 br
                                                 .row
@@ -170,9 +176,13 @@ html(lang="fr")
                                                     .col-5
                                                         input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
                                                 br
-                                                .d-grid.gap-3.d-md-block
+                                                .form-check
+                                                    input#flexCheckIndeterminate.form-check-input(type='checkbox' value='')
+                                                    label.form-check-label(for='flexCheckIndeterminate')
+                                                        | show reactions related to me
+                                                .d-grid.gap-3.d-md-flex.justify-content-md-end
                                                     input.btn.btn-primary(type='submit' value="Validate")
-                                                    button.btn.btn-primary(type='button') Rest
+                                                    button.btn.btn-primary(type='button' href="/main_filter_posts_rest") Rest
                                                    
 
 
