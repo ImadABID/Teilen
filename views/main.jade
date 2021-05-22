@@ -130,7 +130,7 @@ html(lang="fr")
                         .well  
                             .row.no-gutters
                                 h3 Add a post
-                                form(action="/add_post" method="POST")
+                                form(action=`/add_post` method="POST")
                                     input(name="content" type="text" placeholder="write your post" required style="margin:5px;")
                                     br
                                     input(name="image_link" type="url" placeholder="image link https://example.com/image.jpg" pattern="https://.*" style="margin:5px;")

@@ -28,33 +28,55 @@ app.use(session(
     }
 ))
 
+function get_posts(show_reaction_related_to_me, trending_start, trending_end, tag) {
+    return new Promise((resolve) => {
+        if(tag){
+            db.all(
+                `
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                    WHERE (datetime(Posts.date) BETWEEN ? AND ?) AND Posts.tag = ?
+                    ORDER BY Posts.date DESC;
+                `, [trending_start, trending_end, tag], (err, rows)=>{
+                    resolve(rows);
+            });
+        }else{
+            db.all(
+                `
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    FROM Posts JOIN Users ON Posts.author_id =  Users.id
+                    WHERE datetime(Posts.date) BETWEEN ? AND ?
+                    ORDER BY Posts.date DESC;
+                `, [trending_start, trending_end], (err, rows)=>{
+                    resolve(rows);
+            });
+        }
+    });
+  }
+
 app.get('/', async (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
         let db_select = await openDb();
         // Parametres
-        if(!req.query.show_reaction_related_to_me)
-            req.query.show_reaction_related_to_me = true;
-        if(!req.query.trending_start){
+        // req.query.tag
+        if(!req.session.show_reaction_related_to_me)
+            req.session.show_reaction_related_to_me = '1';
+        if(!req.session.trending_start){
             sql_date_selection_name = "datetime('now', 'localtime', '-1 day')"
-            req.query.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.query.trending_start = req.query.trending_start[sql_date_selection_name];
+            req.session.trending_start = await db_select.get("SELECT "+sql_date_selection_name+";");
+            req.session.trending_start = req.session.trending_start[sql_date_selection_name];
         }
-        if(!req.query.trending_end){
+        if(!req.session.trending_end){
             sql_date_selection_name = "datetime('now', 'localtime')"
-            req.query.trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
-            req.query.trending_end = req.query.trending_end[sql_date_selection_name];
+            req.session.trending_end = await db_select.get("SELECT "+sql_date_selection_name+";");
+            req.session.trending_end = req.session.trending_end[sql_date_selection_name];
         }
 
         // Selecting posts
-        const rows = await db_select.all(
-            `
-                SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
-                FROM Posts JOIN Users ON Posts.author_id =  Users.id
-                WHERE datetime(Posts.date) BETWEEN ? AND ?
-                ORDER BY Posts.date DESC;
-            `, [req.query.trending_start, req.query.trending_end]);
+        const rows = await get_posts(req.session.show_reaction_related_to_me, req.session.trending_start, req.session.trending_end, req.session.tag);
+        
 
         for(let i = 0; i < rows.length; i++){
             // Getting reacts
@@ -121,7 +143,11 @@ app.get('/', async (req, res)=>{
         let data = {
             user : user,
             posts : rows,
-            post_tags : post_tags
+            post_tags : post_tags, // All available tags
+            show_reaction_related_to_me : req.query.show_reaction_related_to_me,
+            trending_start : req.query.trending_start,
+            trending_end : req.query.trending_end,
+            tag : req.query.tag
         }
         res.render("main", data);
     }
