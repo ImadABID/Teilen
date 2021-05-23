@@ -259,7 +259,6 @@ app.get('/', async (req, res)=>{
             trending_end_time : trending_end.slice(11, trending_end.length),
             tag : req.session.tag
         }
-        console.log(data)
         res.render("main", data);
     }
 });
@@ -345,7 +344,6 @@ app.get('/profil', async (req, res)=>{
             posts : posts,
             post_tags : post_tags // All available tags
         }
-        console.log(data)
         res.render("profil", data);
     }
 })
@@ -438,10 +436,28 @@ app.get('/show_post', async (req, res)=>{
             user : user,
             post : post
         }
-        console.log(data.post.comments)
         res.render("show_post", data);
     }
 })
+
+app.get('/delete_post?post_id=2&redirect_root=profil'){
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        if(req.session.user_id == req.session.post_id){
+            db.run(`
+                DELETE FROM Posts
+                WHERE Posts.id = ?;
+            `,()=>{
+                if(req.query.redirect_root == "show_post"){
+                    res.redirect('/');
+                }else{
+                    res.redirect('/'+req.query.redirect_root);
+                }
+            })
+        }
+    }
+}
 
 app.get('/inscription', (req, res)=>{
 
