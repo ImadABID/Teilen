@@ -149,7 +149,7 @@ html(lang="fr")
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
                         |Tailen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
-                        a.btn.btn-dark.btn-sm(href='#' role='button' data-bs-toggle='button')
+                        a.btn.btn-dark.btn-sm(href='/profil' role='button' data-bs-toggle='button')
                             i.fa.fa-user(aria-hidden='true' style="color:orange; margin:6px;")
                             | Profil
                         a.btn.btn-dark.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button')
@@ -202,7 +202,7 @@ html(lang="fr")
                                 h3 Add a post
                                 hr
                                 
-                                form(action="/add_post" method="POST")
+                                form(action="/add_post?redirect_root=" method="POST")
                                         .groupe
                                             span Write your post :
                                             input.form-control(type='text' name="content" placeholder=`whats up , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
@@ -238,7 +238,7 @@ html(lang="fr")
                                                 i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                 |edit
                                             a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
-                                    .row       
+                                    .row   
                                     h5(style="font-weight: bold;")=posts[i].pseudo
                                     small=posts[i].date
                                     br
@@ -251,7 +251,7 @@ html(lang="fr")
                                         .row
                                             .col-6
                                                 
-                                                form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=1&redirect_root=` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].ups
                                                         -if(posts[i].user_reaction==-1)
@@ -263,10 +263,9 @@ html(lang="fr")
                                                         -if(posts[i].user_reaction==1)
                                                             i.fa.fa-thumbs-o-up.fa-fw(style="color:#D87F21;" aria-hidden='true')
                                                             span(style="color:#D87F21;") Like
-                                                    
                                                 
                                             .col-6
-                                                form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=0&redirect_root=` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].downs
                                                         -if(posts[i].user_reaction==-1)
@@ -289,7 +288,7 @@ html(lang="fr")
                                                         small=posts[i].comments[j].date
                                                     p.mb-1=posts[i].comments[j].content
 
-                                        form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                        form(action=`/add_comment?post_id=${posts[i].id}&redirect_root=` method="POST")
                                             .row
                                                 .col-10
                                                     input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:8px",required='')
@@ -301,6 +300,3 @@ html(lang="fr")
                             div(style="height: 60px;")
                             .well 
                                 p
-                                
-
-
