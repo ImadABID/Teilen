@@ -462,32 +462,32 @@ app.get('/edit_post', async (req, res)=>{
         res.redirect('/authen')
     }else{
         let db_select = await openDb();
-    }
 
-    // Get Post
-    const post = await db_select.get(`
-        SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag
-        FROM Posts
-        WHERE Posts.id = ?;
-    `,[req.query.post_id]);
+        // Get Post
+        const post = await db_select.get(`
+            SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag
+            FROM Posts
+            WHERE Posts.id = ?;
+        `,[req.query.post_id]);
 
-    // Getting tags
-    const post_tags = await db_select.all(`
-        SELECT tag
-        FROM Posts
-        GROUP BY tag;
-    `)
+        // Getting tags
+        const post_tags = await db_select.all(`
+            SELECT tag
+            FROM Posts
+            GROUP BY tag;
+        `)
 
-    let user = {
-        id : req.session.user_id,
-        pseudo : req.session.pseudo
+        let user = {
+            id : req.session.user_id,
+            pseudo : req.session.pseudo
+        }
+        let data = {
+            user : user,
+            post : post,
+            post_tags : post_tags // All available tags
+        }
+        res.render("edit_post", data);
     }
-    let data = {
-        user : user,
-        post : post,
-        post_tags : post_tags // All available tags
-    }
-    res.render("edit_post", data);
 })
 
 app.get('/delete_comment', (req, res)=>{
