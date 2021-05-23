@@ -258,7 +258,7 @@ html(lang="fr")
                                                             p.mb-1=posts[i].comments[j].content
                                                 .col-1
                                                     -if(user.id==posts[i].comments[j].author_id)
-                                                        a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                        a.btn.badge.rounded-pill.bg-light.text-dark(href='/edit_comment' role='button' data-bs-toggle='button' ) 
                                                             i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                             |edit
                                                         a.btn.badge.rounded-pill.bg-danger.text-dark(href=`/delete_comment?post_id=${posts[i].id}&comment_id=${posts[i].comments[j].id}&redirect_root=profil` role='button' data-bs-toggle='button' ) delete
