@@ -394,7 +394,7 @@ app.get('/show_post', async (req, res)=>{
             post : pub
         }
 
-        res.render("posts", data);
+        res.render("show_post", data);
     }
 })
 
