@@ -440,24 +440,39 @@ app.get('/show_post', async (req, res)=>{
     }
 })
 
-app.get('/delete_post?post_id=2&redirect_root=profil'){
+app.get('/delete_post', (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
-        if(req.session.user_id == req.session.post_id){
-            db.run(`
-                DELETE FROM Posts
-                WHERE Posts.id = ?;
-            `,()=>{
-                if(req.query.redirect_root == "show_post"){
-                    res.redirect('/');
-                }else{
-                    res.redirect('/'+req.query.redirect_root);
-                }
-            })
-        }
+        db.run(`
+            DELETE FROM Posts
+            WHERE Posts.id = ?;
+        `, req.query.post_id, ()=>{
+            if(req.query.redirect_root == "show_post"){
+                res.redirect('/');
+            }else{
+                res.redirect('/'+req.query.redirect_root);
+            }
+        })
     }
-}
+})
+
+app.get('/delete_comment', (req, res)=>{
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        db.run(`
+            DELETE FROM Comments
+            WHERE id = ?;
+        `, req.query.comment_id, ()=>{
+            if(req.query.redirect_root == "show_post"){
+                res.redirect('/show_post?post_id='+req.query.post_id);
+            }else{
+                res.redirect('/'+req.query.redirect_root+"#post"+req.query.post_id);
+            }
+        })
+    }
+})
 
 app.get('/inscription', (req, res)=>{
 
