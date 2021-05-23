@@ -13,7 +13,7 @@ To install node.js used packages
 <code>http://localhost:3030</code>
 
 ## Bonnus 
-You can browser post by tag (subredit);
-You can choose the trending interval ( by default 24 hours )
+You can browser post by tag (subredit);<br>
+You can choose the trending interval ( by default 24 hours )<br>
 When you add/edit/react a post/comment , you are redirected to the right post/comment
 
