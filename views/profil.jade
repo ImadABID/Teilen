@@ -193,9 +193,18 @@ html(lang="fr")
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
                                     .row
-                                        .col-11
-                                        .col-1
+                                        .col-9
                                             span.badge.rounded-pill.text=posts[i].tag
+                                    .row 
+                                        .col-7
+                                        .col-5
+                                            a.btn.badge.rounded-pill.bg-light.text-dark(href=`/show_post?post_id=${posts[i].id}` role='button' data-bs-toggle='button' )
+                                                i.fa.fa-eye(aria-hidden='true' style="margin:5px;")
+                                                | view 
+                                            a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
+                                                |edit
+                                            a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
                                     .row       
                                     h5(style="font-weight: bold;")=posts[i].pseudo
                                     small=posts[i].date
@@ -239,12 +248,19 @@ html(lang="fr")
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
 
                                         -for(var j = 0; j < posts[i].comments.length; j++)
-                                            .list-group
-                                                a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
-                                                    .d-flex.w-100.justify-content-between
-                                                        h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
-                                                        small=posts[i].comments[j].date
-                                                    p.mb-1=posts[i].comments[j].content
+                                            .row
+                                                .col-11
+                                                    .list-group
+                                                        a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
+                                                            .d-flex.w-100.justify-content-between
+                                                                h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
+                                                                small=posts[i].comments[j].date
+                                                            p.mb-1=posts[i].comments[j].content
+                                                .col-1
+                                                    a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                        i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
+                                                        |edit
+                                                    a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
 
                                         form(action=`/add_comment?post_id=${posts[i].id}&redirect_root=profil` method="POST")
                                             .row
