@@ -147,7 +147,7 @@ html(lang="fr")
                 .container-fluid
                     a.navbar-brand(href='#')
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
-                        |Tailen
+                        |Teilen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
                         a.btn.btn-dark.btn-sm(href='#' role='button' data-bs-toggle='button')
                             i.fa.fa-user(aria-hidden='true' style="color:orange; margin:6px;")
@@ -282,12 +282,19 @@ html(lang="fr")
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
                                         
                                         -for(var j = 0; j < posts[i].comments.length; j++)
-                                            .list-group
-                                                a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
-                                                    .d-flex.w-100.justify-content-between
-                                                        h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
-                                                        small=posts[i].comments[j].date
-                                                    p.mb-1=posts[i].comments[j].content
+                                            .row
+                                                .col-11
+                                                    .list-group
+                                                        a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
+                                                            .d-flex.w-100.justify-content-between
+                                                                h6(style="font-weight: bold;")=`${posts[i].comments[j].pseudo} : `
+                                                                small=posts[i].comments[j].date
+                                                            p.mb-1=posts[i].comments[j].content
+                                                .col-1
+                                                    a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                        i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
+                                                        |edit
+                                                    a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
 
                                         form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
                                             .row

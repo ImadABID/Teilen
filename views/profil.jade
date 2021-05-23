@@ -147,11 +147,14 @@ html(lang="fr")
                 .container-fluid
                     a.navbar-brand(href='/')
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
-                        |Tailen
+                        |Teilen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
-                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Profil
-                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Contact
-                        a.btn.btn-secondary.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
+                        a.btn.btn-dark.btn-sm(href='/profil' role='button' data-bs-toggle='button')
+                            i.fa.fa-user(aria-hidden='true' style="color:orange; margin:6px;")
+                            | Profil
+                        a.btn.btn-dark.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button')
+                            i.fa.fa-sign-out(aria-hidden='true' style="color:red; margin:6px;")
+                            | Deconnect
 
             .container-fluid
                 .row
