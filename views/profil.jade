@@ -169,7 +169,7 @@ html(lang="fr")
                                 h5 Add a post
                                 hr
                                 
-                                form(action="/add_post" method="POST")
+                                form(action="/add_post?redirect_root=profil" method="POST")
                                         .groupe
                                             span Write your post :
                                             input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
@@ -188,7 +188,7 @@ html(lang="fr")
                                             span(style="font-style: oblique 40deg; margin:5px;") Not in the list ?
                                             input.form-control-sm(type='text' name="tag_new" placeholder="Write it here"  style="margin:5px border-radius:2px;")
                                         hr
-                                        input(type="submit" class="btn1 mt-3 mb-5" value="Add it")                                                    
+                                        input(type="submit" class="btn1 mt-3 mb-5" value="Add it")
 
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
@@ -208,7 +208,7 @@ html(lang="fr")
                                         .row
                                             .col-6
                                                 
-                                                form(action=`/add_react?post_id=${posts[i].id}&react=1` method='POST')
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=1&redirect_root=profil` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].ups
                                                         -if(posts[i].user_reaction==-1)
@@ -223,7 +223,7 @@ html(lang="fr")
                                                     
                                                 
                                             .col-6
-                                                form(action=`/add_react?post_id=${posts[i].id}&react=0` method='POST')
+                                                form(action=`/add_react?post_id=${posts[i].id}&react=0&redirect_root=profil` method='POST')
                                                     button.btn.bouton(type='submit')
                                                         span.badge.bg-light=posts[i].downs
                                                         -if(posts[i].user_reaction==-1)
@@ -237,7 +237,7 @@ html(lang="fr")
                                                             span Dislike
                                             hr    
                                         span.badge.rounded-pill.bg-light.text-dark Comments :
-                                        
+
                                         -for(var j = 0; j < posts[i].comments.length; j++)
                                             .list-group
                                                 a.list-group-item.list-group-item-action(aria-current='true' id=`comment${posts[i].comments[j].id}` style="background-color:rgb(246, 243, 241);")
@@ -246,7 +246,7 @@ html(lang="fr")
                                                         small=posts[i].comments[j].date
                                                     p.mb-1=posts[i].comments[j].content
 
-                                        form(action=`/add_comment?post_id=${posts[i].id}` method="POST")
+                                        form(action=`/add_comment?post_id=${posts[i].id}&redirect_root=profil` method="POST")
                                             .row
                                                 .col-10
                                                     input.form-control(type='text' name="comment" placeholder="Write your comment here" aria-label='default input example' style="margin:8px",required='')
