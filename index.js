@@ -537,15 +537,15 @@ app.post('/add_post',(req, res)=>{
     db.serialize(()=>{
         if(req.body.tag_new){
             db.run(`
-            INSERT INTO Posts(atureauthor_id, content, image_link, tag, date)
+            INSERT INTO Posts(atureauthor_id, content, image_link, tag, date, score)
             VALUES
-                (?, ?, ?, ?, datetime('now', 'localtime'));
+                (?, ?, ?, ?, datetime('now', 'localtime'), 0);
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
         }else{
             db.run(`
-            INSERT INTO Posts(author_id, content, image_link, tag, date)
+            INSERT INTO Posts(author_id, content, image_link, tag, date, score)
             VALUES
-                (?, ?, ?, ?, datetime('now', 'localtime'));
+                (?, ?, ?, ?, datetime('now', 'localtime'), 0);
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_from_list);
         }
 
