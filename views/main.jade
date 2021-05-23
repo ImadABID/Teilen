@@ -305,7 +305,7 @@ html(lang="fr")
                                                         a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
                                                             i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                             |edit
-                                                        a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
+                                                        a.btn.badge.rounded-pill.bg-danger.text-dark(href=`/delete_comment?post_id=${posts[i].id}&comment_id=&${posts[i].comments[j].id}redirect_root=` role='button' data-bs-toggle='button' ) delete
 
                                         form(action=`/add_comment?post_id=${posts[i].id}&redirect_root=` method="POST")
                                             .row
