@@ -33,20 +33,20 @@ function get_posts(show_reaction_related_to_me, trending_start, trending_end, ta
         if(tag){
             db.all(
                 `
-                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score 
                     FROM Posts JOIN Users ON Posts.author_id =  Users.id
                     WHERE (datetime(Posts.date) BETWEEN ? AND ?) AND Posts.tag = ?
-                    ORDER BY Posts.date DESC;
+                    ORDER BY Posts.score DESC;
                 `, [trending_start, trending_end, tag], (err, rows)=>{
                     resolve(rows);
             });
         }else{
             db.all(
                 `
-                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score
                     FROM Posts JOIN Users ON Posts.author_id =  Users.id
                     WHERE datetime(Posts.date) BETWEEN ? AND ?
-                    ORDER BY Posts.date DESC;
+                    ORDER BY Posts.score DESC;
                 `, [trending_start, trending_end], (err, rows)=>{
                     resolve(rows);
             });
@@ -59,6 +59,21 @@ function rest_main_post_filter(req_session){
     req_session.trending_start = 'yesterday';
     req_session.trending_end = 'now';
     delete req_session.tag;
+}
+
+async function update_post_score(post_id, d_score){
+    let db_select = await openDb();
+
+    let prev_score = await db_select.get(`
+        SELECT Posts.score
+        FROM Posts
+        WHERE Posts.id = ?;
+    `, [post_id])
+    await db_select.run(`
+        UPDATE Posts
+        SET score = ?
+        WHERE id = ?;
+    `, prev_score.score+d_score, post_id)
 }
 
 app.get('/', async (req, res)=>{
@@ -311,6 +326,8 @@ app.post('/add_comment',(req, res)=>{
             (?, ?, ?, datetime('now', 'localtime'));
         `, req.session.user_id, req.query.post_id, req.body.comment);
         
+        update_post_score(req.query.post_id, 1)
+
         db.get(`
         SELECT Comments.id
         FROM Comments
@@ -328,13 +345,14 @@ app.post('/add_react',(req, res)=>{
         SELECT id, react
         FROM Reacts
         WHERE reactor_id = ? AND post_id = ?;
-    `,[req.session.user_id, req.query.post_id],(err, rows) =>{
+    `,[req.session.user_id, req.query.post_id], async (err, rows) =>{
         if(rows.length == 0){
             db.run(`
             INSERT INTO Reacts(reactor_id, post_id, react, date)
             VALUES
                 (?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
+                update_post_score(req.query.post_id, 1)
                 res.redirect('/#post'+req.query.post_id);
             });
         }else{
@@ -343,6 +361,7 @@ app.post('/add_react',(req, res)=>{
                 DELETE FROM Reacts
                 WHERE id = ?;
                 `,rows[0].id, () => {
+                    update_post_score(req.query.post_id, -1)
                     res.redirect('/#post'+req.query.post_id);
                 });
             }else{
