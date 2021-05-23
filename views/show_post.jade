@@ -29,6 +29,7 @@ html(lang="fr")
                 border-color: gray;
                 box-shadow: 1px 1px 1px 1px gray;
                 background: white ;
+                width:80%
             }
             .list-group{
                 border-radius :15px;
@@ -168,7 +169,7 @@ html(lang="fr")
                         
 
           
-                    .col-md-6.me-auto
+                    .col-md-5.me-auto
                         .well
                             .row.no-gutters
                                 .row
@@ -193,42 +194,41 @@ html(lang="fr")
                                 if(post.image_link)
                                     p(style="text-align:center;")
                                         img(src=post.image_link width="100%")
-
-                    .col-md-5.me-auto
-                        .row.no-gutters
-                            div(style="width:80%; margin:auto;")
-                                .row
-                                    .col-6
-                                        
-                                        form(action=`/add_react?post_id=${post.id}&react=1&redirect_root=show_post` method='POST')
-                                            button.btn.bouton(type='submit')
-                                                span.badge.bg-light=post.ups
-                                                -if(post.user_reaction==-1)
-                                                    i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
-                                                    span Like
-                                                -if(post.user_reaction==0)
-                                                    i.fa.fa-thumbs-o-up.fa-fw( aria-hidden='true')
-                                                    span Like
-                                                -if(post.user_reaction==1)
-                                                    i.fa.fa-thumbs-o-up.fa-fw(style="color:#D87F21;" aria-hidden='true')
-                                                    span(style="color:#D87F21;") Like
+                                hr
+                                div(style="width:80%; margin:auto;")
+                                    .row
+                                        .col-6
                                             
-                                        
-                                    .col-6
-                                        form(action=`/add_react?post_id=${post.id}&react=0&redirect_root=show_post` method='POST')
-                                            button.btn.bouton(type='submit')
-                                                span.badge.bg-light=post.downs
-                                                -if(post.user_reaction==-1)
-                                                    i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
-                                                    span Dislike
-                                                -if(post.user_reaction==0)
-                                                    i.fa.fa-thumbs-o-down.fa-fw(style="color:#D87F21;" aria-hidden='true')
-                                                    span(style="color:#D87F21;") Dislike
-                                                -if(posts.user_reaction==1)
-                                                    i.fa.fa-thumbs-o-down.fa-fw( aria-hidden='true')
-                                                    span Dislike
-                                    hr
-                                
+                                            form(action=`/add_react?post_id=${post.id}&react=1&redirect_root=show_post` method='POST')
+                                                button.btn.bouton(type='submit')
+                                                    span.badge.bg-light=post.ups
+                                                    -if(post.user_reaction==-1)
+                                                        i.fa.fa-thumbs-o-up.fa-fw(aria-hidden='true')
+                                                        span Like
+                                                    -if(post.user_reaction==0)
+                                                        i.fa.fa-thumbs-o-up.fa-fw( aria-hidden='true')
+                                                        span Like
+                                                    -if(post.user_reaction==1)
+                                                        i.fa.fa-thumbs-o-up.fa-fw(style="color:#D87F21;" aria-hidden='true')
+                                                        span(style="color:#D87F21;") Like
+                                                
+                                            
+                                        .col-6
+                                            form(action=`/add_react?post_id=${post.id}&react=0&redirect_root=show_post` method='POST')
+                                                button.btn.bouton(type='submit')
+                                                    span.badge.bg-light=post.downs
+                                                    -if(post.user_reaction==-1)
+                                                        i.fa.fa-thumbs-o-down.fa-fw(aria-hidden='true')
+                                                        span Dislike
+                                                    -if(post.user_reaction==0)
+                                                        i.fa.fa-thumbs-o-down.fa-fw(style="color:#D87F21;" aria-hidden='true')
+                                                        span(style="color:#D87F21;") Dislike
+                                                    -if(post.user_reaction==1)
+                                                        i.fa.fa-thumbs-o-down.fa-fw( aria-hidden='true')
+                                                        span Dislike
+
+                    .col-md-6.me-auto
+                        .row.no-gutters                
                             span.badge.rounded-pill.bg-light.text-dark Comments :
                                 br
                                 br
