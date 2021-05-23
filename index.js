@@ -440,24 +440,22 @@ app.get('/show_post', async (req, res)=>{
     }
 })
 
-app.get('/delete_post?post_id=2&redirect_root=profil'){
+app.get('/delete_post', (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
     }else{
-        if(req.session.user_id == req.session.post_id){
-            db.run(`
-                DELETE FROM Posts
-                WHERE Posts.id = ?;
-            `,()=>{
-                if(req.query.redirect_root == "show_post"){
-                    res.redirect('/');
-                }else{
-                    res.redirect('/'+req.query.redirect_root);
-                }
-            })
-        }
+        db.run(`
+            DELETE FROM Posts
+            WHERE Posts.id = ?;
+        `, req.query.post_id, ()=>{
+            if(req.query.redirect_root == "show_post"){
+                res.redirect('/');
+            }else{
+                res.redirect('/'+req.query.redirect_root);
+            }
+        })
     }
-}
+})
 
 app.get('/inscription', (req, res)=>{
 
