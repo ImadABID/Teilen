@@ -179,7 +179,7 @@ html(lang="fr")
                                     .col-8
                                     .col-4
                                         -if(user.id==post.author_id)
-                                            a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                            a.btn.badge.rounded-pill.bg-light.text-dark(href=`/edit_post?post_id=${post.id}&redirect_root=show_post` role='button' data-bs-toggle='button' ) 
                                                 i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                 |edit
                                             a.btn.badge.rounded-pill.bg-danger.text-dark(href=`/delete_post?post_id=${post.id}&redirect_root=show_post` role='button' data-bs-toggle='button' ) delete

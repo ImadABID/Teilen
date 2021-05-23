@@ -145,7 +145,7 @@ html(lang="fr")
 
             nav.navbar.navbar.sticky-top.navbar-dark.bg-dark
                 .container-fluid
-                    a.navbar-brand(href='#')
+                    a.navbar-brand(href='/')
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
                         |Teilen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
@@ -239,7 +239,7 @@ html(lang="fr")
                                                 a.btn.badge.rounded-pill.bg-light.text-dark(href=`/show_post?post_id=${posts[i].id}` role='button' data-bs-toggle='button' )
                                                     i.fa.fa-eye(aria-hidden='true' style="margin:5px;")
                                                     | view 
-                                                a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                a.btn.badge.rounded-pill.bg-light.text-dark(href=`/edit_post?post_id=${posts[i].id}&redirect_root=` role='button' data-bs-toggle='button' ) 
                                                     i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                     |edit
                                                 a.btn.badge.rounded-pill.bg-danger.text-dark(href=`/delete_post?post_id=${posts[i].id}&redirect_root=` role='button' data-bs-toggle='button' ) delete
