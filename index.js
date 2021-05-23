@@ -457,6 +457,40 @@ app.get('/delete_post', (req, res)=>{
     }
 })
 
+app.get('/edit_post', async (req, res)=>{
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        let db_select = await openDb();
+
+        // Get Post
+        const post = await db_select.get(`
+            SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag
+            FROM Posts
+            WHERE Posts.id = ?;
+        `,[req.query.post_id]);
+
+        // Getting tags
+        const post_tags = await db_select.all(`
+            SELECT tag
+            FROM Posts
+            GROUP BY tag;
+        `)
+
+        let user = {
+            id : req.session.user_id,
+            pseudo : req.session.pseudo
+        }
+        let data = {
+            user : user,
+            post : post,
+            post_tags : post_tags, // All available tags
+            redirect_root = req.query.redirect_root
+        }
+        res.render("edit_post", data);
+    }
+})
+
 app.get('/delete_comment', (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
@@ -537,15 +571,15 @@ app.post('/add_post',(req, res)=>{
     db.serialize(()=>{
         if(req.body.tag_new){
             db.run(`
-            INSERT INTO Posts(atureauthor_id, content, image_link, tag, date)
+            INSERT INTO Posts(atureauthor_id, content, image_link, tag, date, score)
             VALUES
-                (?, ?, ?, ?, datetime('now', 'localtime'));
+                (?, ?, ?, ?, datetime('now', 'localtime'), 0);
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_new);
         }else{
             db.run(`
-            INSERT INTO Posts(author_id, content, image_link, tag, date)
+            INSERT INTO Posts(author_id, content, image_link, tag, date, score)
             VALUES
-                (?, ?, ?, ?, datetime('now', 'localtime'));
+                (?, ?, ?, ?, datetime('now', 'localtime'), 0);
             `, req.session.user_id, req.body.content, req.body.image_link, req.body.tag_from_list);
         }
 
