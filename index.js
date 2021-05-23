@@ -369,12 +369,53 @@ app.get('/show_post', async (req, res)=>{
     }else{
         let db_select = await openDb();
 
-        const pub = await db_select.get(`
+        // Get Post
+        const post = await db_select.get(`
             SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo, Posts.tag
             FROM Posts JOIN Users ON Posts.author_id =  Users.id
             WHERE Posts.id = ?;
         `,[req.query.post_id]);
-    
+
+        // Getting reacts
+        const reacts = await db_select.all(`
+            SELECT Reacts.react, COUNT(*)
+            FROM Reacts
+            WHERE Reacts.post_id = ?
+            GROUP BY Reacts.react;
+        `,[req.query.post_id]);
+
+        if(reacts.length == 2){
+            post.downs = reacts[0]['COUNT(*)'];
+            post.ups = reacts[1]['COUNT(*)'];
+        }else{
+            if(reacts.length == 1){
+                if(reacts[0].react == 0){
+                    post.downs = reacts[0]['COUNT(*)'];
+                    post.ups = 0;
+                }else{
+                    post.downs = 0;
+                    post.ups = reacts[0]['COUNT(*)'];
+                }
+            }else{
+                post.downs = 0;
+                post.ups = 0;
+            }
+        }
+
+        // Getting user reaction
+        const user_reaction = await db_select.all(`
+            SELECT Reacts.react
+            FROM Reacts
+            WHERE Reacts.post_id = ? AND Reacts.reactor_id = ?;
+        `,[req.query.post_id, req.session.user_id]);
+
+        if(user_reaction.length==0){
+            post.user_reaction = -1;
+        }else{
+            post.user_reaction = user_reaction[0].react;
+        }
+
+        // Get Comments
         const comments = await db_select.all(`
             SELECT Users.pseudo, Comments.date, Comments.content
             FROM Comments
@@ -382,8 +423,7 @@ app.get('/show_post', async (req, res)=>{
                 JOIN Posts ON Posts.id = Comments.post_id
             WHERE Posts.id = ?;
         `, [req.query.post_id]);
-    
-        pub.comments = comments;
+        post.comments = comments;
 
         let user = {
             pseudo : req.session.pseudo,
@@ -391,9 +431,9 @@ app.get('/show_post', async (req, res)=>{
 
         let data = {
             user : user,
-            post : pub
+            post : post
         }
-
+        console.log(data)
         res.render("posts", data);
     }
 })
