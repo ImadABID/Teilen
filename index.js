@@ -110,7 +110,7 @@ function get_posts(show_reaction_related_to_me, trending_start, trending_end, ta
         if(tag != 'all'){
             db.all(
                 `
-                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score 
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Users.id as 'author_id', Posts.score 
                     FROM Posts JOIN Users ON Posts.author_id =  Users.id
                     WHERE (datetime(Posts.date) BETWEEN ? AND ?) AND Posts.tag = ?
                     ORDER BY Posts.score DESC;
@@ -120,7 +120,7 @@ function get_posts(show_reaction_related_to_me, trending_start, trending_end, ta
         }else{
             db.all(
                 `
-                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score
+                    SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Users.id as 'author_id', Posts.score
                     FROM Posts JOIN Users ON Posts.author_id =  Users.id
                     WHERE datetime(Posts.date) BETWEEN ? AND ?
                     ORDER BY Posts.score DESC;
@@ -227,7 +227,7 @@ app.get('/', async (req, res)=>{
 
             // Getting comments
             const comments_rows = await db_select.all(`
-                SELECT Comments.id, Users.pseudo, Comments.date, Comments.content
+                SELECT Comments.id, Users.pseudo, Users.id as 'author_id', Comments.date, Comments.content
                 FROM Comments
                     JOIN Users ON Users.id = Comments.author_id
                     JOIN Posts ON Posts.id = Comments.post_id
@@ -245,7 +245,8 @@ app.get('/', async (req, res)=>{
         `)
 
         let user = {
-            pseudo : req.session.pseudo,
+            id : req.session.user_id,
+            pseudo : req.session.pseudo
         }
         let data = {
             user : user,
@@ -258,6 +259,7 @@ app.get('/', async (req, res)=>{
             trending_end_time : trending_end.slice(11, trending_end.length),
             tag : req.session.tag
         }
+        console.log(data)
         res.render("main", data);
     }
 });
@@ -269,7 +271,7 @@ app.get('/profil', async (req, res)=>{
         let db_select = await openDb();
         let posts = await db_select.all(
             `
-                SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score
+                SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Users.id as 'author_id', Posts.score
                 FROM Posts JOIN Users ON Posts.author_id =  Users.id
                 WHERE Posts.author_id = ?
                 ORDER BY Posts.score DESC;
@@ -317,7 +319,7 @@ app.get('/profil', async (req, res)=>{
 
             // Getting comments
             const comments_rows = await db_select.all(`
-                SELECT Comments.id, Users.pseudo, Comments.date, Comments.content
+                SELECT Comments.id, Users.pseudo, Users.id as 'author_id', Comments.date, Comments.content
                 FROM Comments
                     JOIN Users ON Users.id = Comments.author_id
                     JOIN Posts ON Posts.id = Comments.post_id
@@ -335,13 +337,15 @@ app.get('/profil', async (req, res)=>{
         `)
 
         let user = {
-            pseudo : req.session.pseudo,
+            id : req.session.user_id,
+            pseudo : req.session.pseudo
         }
         let data = {
             user : user,
             posts : posts,
             post_tags : post_tags // All available tags
         }
+        console.log(data)
         res.render("profil", data);
     }
 })
@@ -371,7 +375,7 @@ app.get('/show_post', async (req, res)=>{
 
         // Get Post
         const post = await db_select.get(`
-            SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo, Posts.tag
+            SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo, Users.id as 'author_id', Posts.tag
             FROM Posts JOIN Users ON Posts.author_id =  Users.id
             WHERE Posts.id = ?;
         `,[req.query.post_id]);
@@ -417,7 +421,7 @@ app.get('/show_post', async (req, res)=>{
 
         // Get Comments
         const comments = await db_select.all(`
-            SELECT Users.pseudo, Comments.date, Comments.content
+            SELECT Comments.id, Users.pseudo, Users.id as 'author_id', Comments.date, Comments.content
             FROM Comments
                 JOIN Users ON Users.id = Comments.author_id
                 JOIN Posts ON Posts.id = Comments.post_id
@@ -426,15 +430,15 @@ app.get('/show_post', async (req, res)=>{
         post.comments = comments;
 
         let user = {
-            pseudo : req.session.pseudo,
+            id : req.session.user_id,
+            pseudo : req.session.pseudo
         }
 
         let data = {
             user : user,
             post : post
         }
-
-        console.log(data)
+        console.log(data.post.comments)
         res.render("show_post", data);
     }
 })
@@ -540,7 +544,11 @@ app.post('/add_comment',(req, res)=>{
         WHERE author_id = ? AND post_id = ? AND content = ?;
         `, [req.session.user_id, req.query.post_id, req.body.comment], (err, raw)=>{
             //res.redirect('/#comment'+raw.id);
-            res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+            if(req.query.redirect_root == "show_post"){
+                res.redirect("/show_post?post_id="+req.query.post_id);
+            }else{
+                res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+            }
         })
     })
 })
@@ -559,7 +567,11 @@ app.post('/add_react',(req, res)=>{
                 (?, ?, ?, datetime('now', 'localtime'));
             `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
                 update_post_score(req.query.post_id, 1)
-                res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+                if(req.query.redirect_root == "show_post"){
+                    res.redirect("/show_post?post_id="+req.query.post_id);
+                }else{
+                    res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+                }
             });
         }else{
             if(rows[0].react == req.query.react){
@@ -568,7 +580,11 @@ app.post('/add_react',(req, res)=>{
                 WHERE id = ?;
                 `,rows[0].id, () => {
                     update_post_score(req.query.post_id, -1)
-                    res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+                    if(req.query.redirect_root == "show_post"){
+                        res.redirect("/show_post?post_id="+req.query.post_id);
+                    }else{
+                        res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+                    }
                 });
             }else{
 
@@ -582,7 +598,13 @@ app.post('/add_react',(req, res)=>{
                 VALUES
                     (?, ?, ?, datetime('now', 'localtime'));
                 `, req.session.user_id, req.query.post_id, req.query.react, ()=>{
-                    res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+
+                    if(req.query.redirect_root == "show_post"){
+                        res.redirect("/show_post?post_id="+req.query.post_id);
+                    }else{
+                        res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id);
+                    }
+
                 });
             }
         }
