@@ -161,29 +161,31 @@ html(lang="fr")
                 .row
                     .col-md-3.me-auto            
             
-                    .col-md-7.me-auto
+                    .col-md-6.me-auto
                         .well  
                             .row.no-gutters
                                 h3 Edit the post
                                 hr
                                 
-                                form(action="/add_post?redirect_root=" method="POST")
+                                form(action=`/edit_post?post_id=${post.id}&redirect_root=${redirect_root}` method="POST")
                                         .groupe
                                             span Write your post :
-                                            input.form-control(type='text' name="content" placeholder=`whats up , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
+                                            input.form-control(type='text' name="content" value=post.content aria-label='default input example' style="margin:5px;",required)
                                             br
                                             i.fa.fa-link.fa-fw(aria-hidden='true')
                                             span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
-                                            input.form-control(type='url' name="image_link" placeholder="image link https://example.com/image.jpg"  pattern="https://.*" aria-label='With textarea' style="margin:5px border-radius:2px;")
+                                            input.form-control(type='url' name="image_link" value=post.image_link  pattern="https://.*" aria-label='With textarea' style="margin:5px border-radius:2px;")
                                             br
                                             span Select your post tag :
                                             br
                                             .row
-                                            select.form-select-sm(name="tag_from_list" aria-label='Default select example',required)
+                                            select.form-select-sm(name="tag" aria-label='Default select example',required)
                                                 - for(let i = 0; i < post_tags.length; i++)
-                                                    option(value=post_tags[i].tag)=post_tags[i].tag
-                                                option(value='other') Not in the list
-                                            span(style="font-style: oblique 40deg; margin:5px;") Not in the list ?
-                                            input.form-control-sm(type='text' name="tag_new" placeholder="Write it here"  style="margin:5px border-radius:2px;")
+                                                    -if(post_tags[i].tag == post.tag)
+                                                        option(value=post_tags[i].tag selected=`selected`)=post_tags[i].tag
+                                                    -else
+                                                        option(value=post_tags[i].tag)=post_tags[i].tag
                                         hr
                                         input(type="submit" class="btn1 mt-3 mb-5" value="Edit it")
+
+                    .col-md-3.me-auto       

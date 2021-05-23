@@ -485,7 +485,7 @@ app.get('/edit_post', async (req, res)=>{
             user : user,
             post : post,
             post_tags : post_tags, // All available tags
-            redirect_root = req.query.redirect_root
+            redirect_root : req.query.redirect_root
         }
         res.render("edit_post", data);
     }
