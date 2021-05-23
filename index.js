@@ -433,7 +433,8 @@ app.get('/show_post', async (req, res)=>{
             user : user,
             post : post
         }
-        res.render("posts", data);
+
+        res.render("show_post", data);
     }
 })
 
