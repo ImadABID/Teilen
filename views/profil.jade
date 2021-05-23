@@ -4,9 +4,9 @@ html(lang="fr")
         meta(charset="UTF-8")
         title Accueil
         link(rel='icon' type='image/x-icon' href='assets/favicon.ico')
+        link(rel='icon' type='image/svg' href='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg')
         link(href='css/styles.css' rel='stylesheet')
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
-        link(rel='icon' type='image/svg' href='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg')
         link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1' crossorigin='anonymous')
         style.
 
@@ -112,12 +112,12 @@ html(lang="fr")
                 margin: .4rem 0;
             }
             #start{
-                border-radius:10px;
+                border-radius:5px;
                 margin:2px;
     
             }
             #appt{
-                border-radius:10px;
+                border-radius:5px;
                 margin:2px;
             }
             .btn.btn-primary{
@@ -145,67 +145,31 @@ html(lang="fr")
 
             nav.navbar.navbar.sticky-top.navbar-dark.bg-dark
                 .container-fluid
-                    a.navbar-brand(href='#')
+                    a.navbar-brand(href='/')
                         img(src='https://abid.alwaysdata.net/shared_Media/Teilen_logo.svg' alt='' width='30' height='24')
                         |Tailen
                     .d-grid.gap-2.d-md-flex.justify-content-md-end
-                        a.btn.btn-dark.btn-sm(href='#' role='button' data-bs-toggle='button')
-                            i.fa.fa-user(aria-hidden='true' style="color:orange; margin:6px;")
-                            | Profil
-                        a.btn.btn-dark.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button')
-                            i.fa.fa-sign-out(aria-hidden='true' style="color:red; margin:6px;")
-                            | Deconnect
-
+                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Profil
+                        a.btn.btn-secondary.btn-sm(href='#' role='button' data-bs-toggle='button') Contact
+                        a.btn.btn-secondary.btn-sm.btn-danger(href='/deconnect' role='button' data-bs-toggle='button') Deconnect
 
             .container-fluid
                 .row
-                    .col-md-3.me-auto
+                    .col-md-2.me-auto
                         .w-40.sticky-top
-                                div(style="height: 60px;")
-                                .well
-                                    form(action="/main_filter_posts")
-                                            h4 Filter Posts
-                                            .groupe2
-                                                label(style="font-weight: bold;") Choose trending interval :
-                                                br
-                                                span from :
-                                                br
-                                                .row
-                                                    .col-7
-                                                        input#start(type='date' name='trending_start_date' value=`${trending_start_date}`)
-                                                    .col-5
-                                                        input#appt(type='time' name='trending_start_time' value=`${trending_start_time}` required='')
-                                                span to :
-                                                br
-                                                .row
-                                                    .col-7
-                                                        input#start(type='date' name='trending_end_date' value=`${trending_end_date}`)
-                                                    .col-5
-                                                        input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
-                                                br
-                                                span(style="margin:5px;") select tag :
-                                                select.form-select-sm(name="tag" aria-label='Default select example',required)
-                                                    - for(let i = 0; i < post_tags.length; i++)
-                                                        option(value=post_tags[i].tag)=post_tags[i].tag
-                                                .form-check
-                                                    input#flexCheckIndeterminate.form-check-input(type='checkbox' name='show_reaction_related_to_me')
-                                                    label.form-check-label(for='flexCheckIndeterminate')
-                                                        | show reactions related to me
-                                                .d-grid.gap-3.d-md-flex.justify-content-md-end
-                                                    input.btn.btn-primary(type='submit' value="Validate")
-                                                    a.btn.btn-primary(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) Rest
-                                                   
-            
-                    .col-md-7.me-auto
-                        .well  
+          
+                    .col-md-6.me-auto
+                        .well
+                            .row.no-gutters(style="background-color:rgb(232, 216, 204);")
+                                h3(style="color:black;")=`Welcom ${user.pseudo} to your profil`
                             .row.no-gutters
-                                h3 Add a post
+                                h5 Add a post
                                 hr
                                 
                                 form(action="/add_post" method="POST")
                                         .groupe
                                             span Write your post :
-                                            input.form-control(type='text' name="content" placeholder=`whats up , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
+                                            input.form-control(type='text' name="content" placeholder=`whatsup , ${user.pseudo} ?` aria-label='default input example' style="margin:5px;",required)
                                             br
                                             i.fa.fa-link.fa-fw(aria-hidden='true')
                                             span(style="font-style: oblique 40deg; margin:3px;") Add a link :                                   
@@ -226,22 +190,12 @@ html(lang="fr")
                             -for(var i = 0; i < posts.length; i++)
                                 .row.no-gutters(id=`post${posts[i].id}`)
                                     .row
-                                        .col-9
+                                        .col-11
+                                        .col-1
                                             span.badge.rounded-pill.text=posts[i].tag
-                                    .row 
-                                        .col-8
-                                        .col-4
-                                            a.btn.badge.rounded-pill.bg-light.text-dark(href=`/show_post?post_id=${posts[i].id}` role='button' data-bs-toggle='button' )
-                                                i.fa.fa-eye(aria-hidden='true' style="margin:5px;")
-                                                | view 
-                                            a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
-                                                i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
-                                                |edit
-                                            a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
                                     .row       
                                     h5(style="font-weight: bold;")=posts[i].pseudo
                                     small=posts[i].date
-                                    br
                                     h6=posts[i].content
                                     if(posts[i].image_link)
                                         p(style="text-align:center;")
@@ -300,7 +254,4 @@ html(lang="fr")
                         .w-25.sticky-top
                             div(style="height: 60px;")
                             .well 
-                                p
-                                
-
-
+                                p           

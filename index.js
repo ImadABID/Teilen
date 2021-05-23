@@ -190,7 +190,7 @@ app.get('/show_post', async (req, res)=>{
         let db_select = await openDb();
 
         const pub = await db_select.get(`
-            SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo
+            SELECT Posts.id, Posts.content, Posts.image_link, Posts.date, Users.pseudo, Posts.tag
             FROM Posts JOIN Users ON Posts.author_id =  Users.id
             WHERE Posts.id = ?;
         `,[req.query.post_id]);
@@ -214,7 +214,7 @@ app.get('/show_post', async (req, res)=>{
             post : pub
         }
 
-        res.render("show_post_no_style", data);
+        res.render("posts", data);
     }
 })
 
