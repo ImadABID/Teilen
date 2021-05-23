@@ -107,7 +107,7 @@ function get_update_on_posts_related_me(user_id, trending_start, trending_end){
 
 function get_posts(show_reaction_related_to_me, trending_start, trending_end, tag) {
     return new Promise((resolve) => {
-        if(tag){
+        if(tag != 'all'){
             db.all(
                 `
                     SELECT Posts.id, Posts.content, Posts.image_link, Posts.tag, Posts.date, Users.pseudo, Posts.score 
@@ -135,7 +135,7 @@ function rest_main_post_filter(req_session){
     req_session.show_reaction_related_to_me = 1;
     req_session.trending_start = 'yesterday';
     req_session.trending_end = 'now';
-    delete req_session.tag;
+    req_session.tag = 'all';
 }
 
 async function update_post_score(post_id, d_score){
@@ -433,7 +433,6 @@ app.get('/show_post', async (req, res)=>{
             user : user,
             post : post
         }
-        console.log(data)
         res.render("posts", data);
     }
 })

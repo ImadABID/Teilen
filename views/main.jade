@@ -184,9 +184,13 @@ html(lang="fr")
                                                         input#appt(type='time' name='trending_end_time' value=`${trending_end_time}` required)
                                                 br
                                                 span(style="margin:5px;") select tag :
-                                                select.form-select-sm(name="tag" aria-label='Default select example',required)
+                                                select.form-select-sm(name="tag" aria-label='Default select example', required)
+                                                    option(value='all')='all'
                                                     - for(let i = 0; i < post_tags.length; i++)
-                                                        option(value=post_tags[i].tag)=post_tags[i].tag
+                                                        -if(post_tags[i].tag == tag)
+                                                            option(value=post_tags[i].tag selected=`selected`)=post_tags[i].tag
+                                                        -else
+                                                            option(value=post_tags[i].tag)=post_tags[i].tag
                                                 .form-check
                                                     input#flexCheckIndeterminate.form-check-input(type='checkbox' name='show_reaction_related_to_me')
                                                     label.form-check-label(for='flexCheckIndeterminate')
