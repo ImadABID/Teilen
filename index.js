@@ -491,6 +491,22 @@ app.get('/edit_post', async (req, res)=>{
     }
 })
 
+app.post('/edit_post', async (req, res)=>{
+    db.run(`
+        UPDATE Posts
+        SET content = ?,
+            image_link = ?,
+            tag = ?
+        WHERE id = ?;
+    `, req.body.content, req.body.image_link, req.body.tag, req.query.post_id, ()=>{
+        if(req.query.redirect_root ==  "show_post"){
+            res.redirect("/show_post?post_id="+req.query.post_id)
+        }else{
+            res.redirect("/"+req.query.redirect_root+"#"+req.query.post_id)
+        }
+    })
+})
+
 app.get('/delete_comment', (req, res)=>{
     if(!req.session.pseudo){
         res.redirect('/authen')
