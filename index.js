@@ -457,6 +457,23 @@ app.get('/delete_post', (req, res)=>{
     }
 })
 
+app.get('/delete_comment', (req, res)=>{
+    if(!req.session.pseudo){
+        res.redirect('/authen')
+    }else{
+        db.run(`
+            DELETE FROM Comments
+            WHERE id = ?;
+        `, req.query.comment_id, ()=>{
+            if(req.query.redirect_root == "show_post"){
+                res.redirect('/show_post?post_id='+req.query.post_id);
+            }else{
+                res.redirect('/'+req.query.redirect_root+"#post"+req.query.post_id);
+            }
+        })
+    }
+})
+
 app.get('/inscription', (req, res)=>{
 
     res.render('inscription');
