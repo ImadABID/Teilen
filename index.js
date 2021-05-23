@@ -502,7 +502,7 @@ app.post('/edit_post', async (req, res)=>{
         if(req.query.redirect_root ==  "show_post"){
             res.redirect("/show_post?post_id="+req.query.post_id)
         }else{
-            res.redirect("/"+req.query.redirect_root+"#"+req.query.post_id)
+            res.redirect("/"+req.query.redirect_root+"#post"+req.query.post_id)
         }
     })
 })
@@ -522,6 +522,10 @@ app.get('/delete_comment', (req, res)=>{
             }
         })
     }
+})
+
+app.get('/edit_comment',(req, res)=>{
+    res.send('Not implemented due to seek of time.')
 })
 
 app.get('/inscription', (req, res)=>{
