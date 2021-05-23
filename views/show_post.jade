@@ -178,10 +178,11 @@ html(lang="fr")
                                 .row 
                                     .col-8
                                     .col-4
-                                        a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
-                                            i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
-                                            |edit
-                                        a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
+                                        -if(user.id==post.author_id)
+                                            a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
+                                                |edit
+                                            a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
                                 br
                                 br
                                 .row
@@ -242,10 +243,11 @@ html(lang="fr")
                                                     small=post.comments[j].date
                                                 p.mb-1=post.comments[j].content
                                     .col-1
-                                        a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
-                                            i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
-                                            |edit
-                                        a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
+                                        -if(user.id==post.comments[j].author_id)
+                                            a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
+                                                i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
+                                                |edit
+                                            a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
                             form(action=`/add_comment?post_id=${post.id}&redirect_root=show_post` method="POST")
                                 .row
                                     .col-8

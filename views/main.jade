@@ -235,14 +235,19 @@ html(lang="fr")
                                     .row 
                                         .col-8
                                         .col-4
+                                            -if(user.id==posts[i].author_id)
                                                 a.btn.badge.rounded-pill.bg-light.text-dark(href=`/show_post?post_id=${posts[i].id}` role='button' data-bs-toggle='button' )
                                                     i.fa.fa-eye(aria-hidden='true' style="margin:5px;")
                                                     | view 
-                                            if(user.user_id==posts[i].author_id)
                                                 a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
                                                     i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
                                                     |edit
                                                 a.btn.badge.rounded-pill.bg-danger.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) delete
+                                            -else
+                                                a.btn.badge.rounded-pill.bg-light.text-dark(href=`/show_post?post_id=${posts[i].id}` role='button' data-bs-toggle='button' )
+                                                    i.fa.fa-eye(aria-hidden='true' style="margin:5px;")
+                                                    | view 
+                                    
                                     .row   
                                     h5(style="font-weight: bold;")=posts[i].pseudo
                                     small=posts[i].date
@@ -295,7 +300,7 @@ html(lang="fr")
                                                                 small=posts[i].comments[j].date
                                                             p.mb-1=posts[i].comments[j].content
                                                 .col-1
-                                                    if(user.user_id==posts[i].comments[j].author_id)
+                                                    -if(user.id==posts[i].comments[j].author_id)
 
                                                         a.btn.badge.rounded-pill.bg-light.text-dark(href='/main_filter_posts_rest' role='button' data-bs-toggle='button' ) 
                                                             i.fa.fa-pencil-square-o(aria-hidden='true' style="margin:5px;")
